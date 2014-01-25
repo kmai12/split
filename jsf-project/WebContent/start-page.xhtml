@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html">
+<h:head>
+<title>Split start-page</title>
+<link href="./css/styles.css" 
+      rel="stylesheet" type="text/css"/> <!--  Assumes you have styles.css in WebContent/css/ -->
+</h:head>
+<h:body>
+<h1 class="title">Welcome to Split</h1><br/>
+<!-- Other HTML tags and non-input JSF elements here -->
+<div align="center">
+<fieldset>
+<legend>Login</legend>
+<h:form>
+<br/>
+Username:
+<h:inputText value="#{loginForm.user}"/><br/>
+Password:
+<h:inputSecret type="password" value="#{loginForm.pw}"/><br/>
+<h:commandButton value="Go" action="#{loginForm.login}"/>
+<h:commandButton value="Register" />
+<h:commandButton value="Forgot PW?" />
+
+</h:form>
+</fieldset>
+</div>
+<!-- This means bean named "yourBean" must have method named "getYourProperty" -->
+<!--  #{yourBean.yourProperty} -->
+
+<!-- Other HTML tags and non-input JSF elements here -->
+</h:body></html>
