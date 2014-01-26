@@ -3,7 +3,7 @@ package splitPackage;
 import javax.faces.bean.*;
 
 @ManagedBean
-public class SomeBean extends Object{
+public class Login extends Object{
   private String someProperty = "Blah, blah";
 
   public String getSomeProperty() {

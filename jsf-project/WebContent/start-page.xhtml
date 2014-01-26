@@ -16,11 +16,11 @@
 <h:form>
 <br/>
 Username:
-<h:inputText value="#{loginForm.user}"/><br/>
+<h:inputText value="#{user.user}"/><br/>
 Password:
-<h:inputSecret type="password" value="#{loginForm.pw}"/><br/>
-<h:commandButton value="Go" action="#{loginForm.login}"/>
-<h:commandButton value="Register" />
+<h:inputSecret type="password" value="#{user.pw}"/><br/>
+<h:commandButton value="Go" action="#{user.login}"/>
+<h:commandButton value="Register" action="register"/>
 <h:commandButton value="Forgot PW?" />
 
 </h:form>
