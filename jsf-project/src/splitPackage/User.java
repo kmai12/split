@@ -28,10 +28,13 @@ public class User{
 	  this.pw = pw.trim();
   }
   
-  public String login2(){
-	  return "home";
+  public void register(){
+	  //stub
   }
   
+  public void resetpw(){
+	  //stub
+  }
   public String logout(){
 	  return "start-page";
   }
@@ -41,7 +44,7 @@ public class User{
   }
   
   public String login() throws IOException {
-  FileReader file = new FileReader("C:/Users/Jenny/Desktop/Userdb.txt"); 
+  FileReader file = new FileReader("C:/Users/Kevin/Desktop/Userdatabase"); 
 		BufferedReader reader = new BufferedReader(file);
 	  
 	  //String txt = "";

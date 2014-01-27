@@ -3,30 +3,29 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html">
 <h:head>
-<title>Split start-page</title>
+<title>Forgot pw</title>
 <link href="./css/styles.css" 
       rel="stylesheet" type="text/css"/> <!--  Assumes you have styles.css in WebContent/css/ -->
 </h:head>
 <h:body>
-<h1 class="title">Welcome to Split</h1><br/>
+<h1 class="title">Forgot your password?</h1><br/>
 <!-- Other HTML tags and non-input JSF elements here -->
 <div align="center">
 <fieldset>
-<legend>Register</legend>
+<legend>Reset PW</legend>
 <h:form>
 <br/>
 Username:
 <h:inputText value="#{user.user}"/><br/>
 Password:
 <h:inputSecret type="password" value="#{user.pw}"/><br/>
-<h:commandButton value="Register" action="#{user.register}"/>
+<h:commandButton value="Reset Password" action="#{user.resetpw}"/>
 <h:commandButton value="Go back" action="start-page"/>
 
 </h:form>
 </fieldset>
 </div>
-<!-- This means bean named "yourBean" must have method named "getYourProperty" -->
-<!--  #{yourBean.yourProperty} -->
+
 
 <!-- Other HTML tags and non-input JSF elements here -->
 </h:body></html>
