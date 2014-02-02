@@ -6,7 +6,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-
+//hi there
 @ManagedBean
 public class User{
   private String user;
