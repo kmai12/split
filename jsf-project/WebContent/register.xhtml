@@ -3,25 +3,31 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html">
 <h:head>
-<title>Register</title>
-<!--  The "link" tag below assumes you have styles.css in WebContent/css/
-      and that you put the .xhtml file in the main WebContent folder,
-      not in WebContent/samples. -->
+<title>Spl-it Registration Page</title>
 <link href="./css/styles.css" 
-      rel="stylesheet" type="text/css"/>  
+      rel="stylesheet" type="text/css"/> <!--  Assumes you have styles.css in WebContent/css/ -->
 </h:head>
 <h:body>
-<h1>Your Heading Here</h1>
+<h1 class="title">Registration Page</h1><br/>
 <!-- Other HTML tags and non-input JSF elements here -->
-
+<div align="center">
+<fieldset>
+<legend>Register</legend>
 <h:form>
-  <!-- This means bean named "yourBean" must have getYourProperty and setYourProperty -->
-  <h:inputText value="#{yourBean.yourProperty}"/>
-  
-  <!-- This means bean named "yourBean" must have method named "yourActionController" that
-       takes no arguments and returns a String -->
-  <h:commandButton value="Click Me" action="#{yourBean.yourActionController}"/>
+<br/>
+Username:
+<h:inputText value="#{user.user}"/><br/>
+Password:
+<h:inputSecret type="password" value="#{user.pw}"/><br/>
+<h:commandButton value="Submit" action="#{user.register}"/>
+<h:commandButton value="Go back" action="start-page"/>
 </h:form>
+</fieldset>
+</div>
+
+
+<!-- This means bean named "yourBean" must have method named "getYourProperty" -->
+<!--  #{yourBean.yourProperty} -->
 
 <!-- Other HTML tags and non-input JSF elements here -->
 </h:body></html>
