@@ -19,5 +19,6 @@
 			<attribute name="owner.project.facets" value="jst.jsf"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/MySQL/Connector J 5.1.28/mysql-connector-java-5.1.28-bin.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

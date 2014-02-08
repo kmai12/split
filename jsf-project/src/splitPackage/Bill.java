@@ -14,7 +14,7 @@ public class Bill {
 	private ArrayList<User> recipients = new ArrayList<User>();
 	private Date timeStamp;
 	private String status;
-	private ActionCaller action = new ActionCaller();
+	private UserManager action = new UserManager();
 	
 	//Constructors
 	public Bill() {
