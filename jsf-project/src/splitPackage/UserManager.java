@@ -22,22 +22,20 @@ import java.io.PrintWriter;
 
 public class UserManager {
 	private User currentUser;
+	private String status;
 	
 	public UserManager() {
 		currentUser = new User();
 	}
 
-	public UserManager(User currentUser) {
-		this.currentUser = currentUser;
-	}
+	public UserManager(User currentUser) {this.currentUser = currentUser;}
 
-	public User getCurrentUser(){
-		return currentUser;
-	}
+	public User getCurrentUser(){return currentUser;}
 	
-	public void setCurrentUser(User u){
-		currentUser = u;
-	}
+	public void setCurrentUser(User u){ currentUser = u;}
+	
+	public String getStatus(){ return status;}
+	public void setStatus(String status) { this.status = status;}
 	
 	//Methods for Registration/Login
 	public String registerUser(User newUser) throws IOException {
@@ -48,20 +46,27 @@ public class UserManager {
 		ResultSet rs = null;
         Connection connection = null;
         Statement statement = null; 
- 
-        String query = "SELECT * FROM user WHERE user_name='" + currentUser.getUser() +"'";
+        String usernameInput = currentUser.getUser();
+        
+        String query = "SELECT * FROM user WHERE user_name='" + usernameInput +"'";
         try {
             connection = JDBCMySQLConnection.getConnection();
             statement = connection.createStatement();
             rs = statement.executeQuery(query);
  
             if (rs.next()) {
-            	currentUser.setID(rs.getInt("user_id"));
+
             	currentUser.setUser(rs.getString("user_name"));
+            	currentUser.setID(rs.getInt("user_id"));
+            	currentUser.setPw(rs.getString("password"));
             	currentUser.setFirst(rs.getString("first"));
             	currentUser.setLast(rs.getString("last"));
             	currentUser.setEmail(rs.getString("email"));
             }
+            else{
+        		status = "Username not found!";
+        		return "start-page";
+        	}
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {

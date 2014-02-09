@@ -15,14 +15,15 @@
 <legend>Login</legend>
 <h:form>
 <br/>
-Username:
+<h:outputLabel value="Username: " style="font-weight:bold" />
 <h:inputText value="#{userManager.currentUser.user}"/><br/>
-Password:
+<h:outputLabel value="Password: " style="font-weight:bold" />
 <h:inputSecret type="password" value="#{userManager.currentUser.pw}"/><br/>
 <h:commandButton value="Go" action="#{userManager.login}"/>
 <h:commandButton value="Register" action="register"/>
 <h:commandButton value="Forgot PW?" />
-
+<br/>
+<h:outputLabel value="#{userManager.status}"/>
 </h:form>
 </fieldset>
 </div>
