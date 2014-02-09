@@ -48,23 +48,25 @@ public class UserManager {
         Statement statement = null; 
         String usernameInput = currentUser.getUser();
         
-        String query = "SELECT * FROM user WHERE user_name='" + usernameInput +"'";
+        String query = "SELECT * FROM user WHERE BINARY user_name='" + usernameInput +"'";
         try {
             connection = JDBCMySQLConnection.getConnection();
             statement = connection.createStatement();
             rs = statement.executeQuery(query);
- 
             if (rs.next()) {
-
             	currentUser.setUser(rs.getString("user_name"));
             	currentUser.setID(rs.getInt("user_id"));
+            	if(!(currentUser.getPw().equals(rs.getString("password")))){
+            		status = "Invalid Password!";
+            		return "start-page";
+            	}
             	currentUser.setPw(rs.getString("password"));
             	currentUser.setFirst(rs.getString("first"));
             	currentUser.setLast(rs.getString("last"));
             	currentUser.setEmail(rs.getString("email"));
             }
             else{
-        		status = "Username not found!";
+        		status = "Username " + usernameInput + " not found!";
         		return "start-page";
         	}
         } catch (SQLException e) {
