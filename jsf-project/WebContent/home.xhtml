@@ -11,7 +11,9 @@
 <h1 class="title">Split</h1>
 
 <h2>Welcome #{userManager.currentUser.user} </h2>
+<h2>Info: #{userManager.currentUser.first}, #{userManager.currentUser.email} </h2>
+<br/>
 <h:form>
-<h:commandButton value="Logout" action="#{user.logout}"/>
+<h:commandButton value="Logout" action="#{userManager.currentUser.logout}"/>
 </h:form>
 </h:body></html>

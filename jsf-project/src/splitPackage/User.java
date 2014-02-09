@@ -42,6 +42,8 @@ public class User{
   public void setFirst(String f){ this.first = f;};
   public String getLast(){ return last;}
   public void setLast(String l){ this.last = l;};
+  public String getEmail(){ return email;};
+  public void setEmail(String email){ this.email = email;}
   public ArrayList<Bill> getBills() { return this.bills; }
   
   
