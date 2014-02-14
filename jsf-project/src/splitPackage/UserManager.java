@@ -2,7 +2,7 @@ package splitPackage;
 
 import javax.faces.bean.*;
 
-import splitPackageJDBC.JDBCMySQLConnection;
+import splitPackageJDBC.JDBCSQLiteConnection;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -56,9 +56,9 @@ public class UserManager {
         Statement statement = null; 
         String usernameInput = currentUser.getUser();
         
-        String query = "SELECT * FROM user WHERE BINARY user_name='" + usernameInput +"'";
+        String query = "SELECT * FROM user WHERE user_name='" + usernameInput +"'";
         try {
-            connection = JDBCMySQLConnection.getConnection();
+            connection = JDBCSQLiteConnection.getConnection();
             statement = connection.createStatement();
             rs = statement.executeQuery(query);
             if (rs.next()) {
