@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html">
+<h:head>
+<title>sendnotification</title>
+<link href="./css/styles.css" 
+      rel="stylesheet" type="text/css"/> <!--  Assumes you have styles.css in WebContent/css/ -->
+</h:head>
+<h:body>
+<h1 class="title">Send Notification(s)</h1><br/>
+<!-- Other HTML tags and non-input JSF elements here -->
+<div align="center">
+<fieldset>
+<h:form>
+<legend>Send Notification(s) to your recipients.</legend>
+<br/>
+Custom Message
+<input/>
+<br/>
+<h:commandButton value="Send Custom Message" action="messagesent"/>
+<h:commandButton value="Send Default Message" action="messagesent"/>
+<h:commandButton value="back" action="front-page"/>
+<br/>
+</h:form>
+</fieldset>
+</div>
+<!-- This means bean named "yourBean" must have method named "getYourProperty" -->
+<!--  #{yourBean.yourProperty} -->
+
+<!-- Other HTML tags and non-input JSF elements here -->
+</h:body></html>

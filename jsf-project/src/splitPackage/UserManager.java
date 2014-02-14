@@ -88,7 +88,7 @@ public class UserManager {
                 }
             }
         }
-		return "home";
+		return "front-page";
 	}
 
 	// after creating a bill return the user home
