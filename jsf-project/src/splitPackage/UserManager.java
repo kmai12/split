@@ -18,11 +18,16 @@ import java.io.FileWriter;
 import java.io.PrintWriter;
 
 
+/**
+ * @author splitIt
+ * The class that drives the app.
+ * Is in charge of account management, creating/paying bills, etc.
+ */
 @ManagedBean
 
 public class UserManager {
-	private User currentUser;
-	private String status;
+	private User currentUser;			//Current user logged in
+	private String statusMessage;		//message that can be displayed on webpages i.e "Invalid Password!"
 	
 	public UserManager() {
 		currentUser = new User();
@@ -34,12 +39,15 @@ public class UserManager {
 	
 	public void setCurrentUser(User u){ currentUser = u;}
 	
-	public String getStatus(){ return status;}
-	public void setStatus(String status) { this.status = status;}
+	public String getStatusMessage(){ return statusMessage;}
+	
+	public void setStatusMessage(String statusMessage) { this.statusMessage = statusMessage;}
 	
 	//Methods for Registration/Login
-	public String registerUser(User newUser) throws IOException {
-		return "home";
+	public String registerUser(){
+		
+		System.out.println(currentUser.getLast());
+		return "start-page";
 	}
 
 	public String login(){
@@ -57,7 +65,7 @@ public class UserManager {
             	currentUser.setUser(rs.getString("user_name"));
             	currentUser.setID(rs.getInt("user_id"));
             	if(!(currentUser.getPw().equals(rs.getString("password")))){
-            		status = "Invalid Password!";
+            		statusMessage = "Invalid Password!";
             		return "start-page";
             	}
             	currentUser.setPw(rs.getString("password"));
@@ -66,7 +74,7 @@ public class UserManager {
             	currentUser.setEmail(rs.getString("email"));
             }
             else{
-        		status = "Username " + usernameInput + " not found!";
+        		statusMessage = "Username " + usernameInput + " not found!";
         		return "start-page";
         	}
         } catch (SQLException e) {

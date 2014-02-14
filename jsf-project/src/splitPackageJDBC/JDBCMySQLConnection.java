@@ -9,8 +9,8 @@ public class JDBCMySQLConnection {
   //static reference to itself
   private static JDBCMySQLConnection instance = new JDBCMySQLConnection();
   public static final String URL = "jdbc:mysql://localhost/splitdb";
-  public static final String USER = "kmai";
-  public static final String PASSWORD = "456654";
+  public static final String USER = "root";
+  public static final String PASSWORD = "";
   //public static final String USER = "YOUR_DATABASE_USERNAME";
   //public static final String PASSWORD = "YOUR_DATABASE_PASSWORD";
   public static final String DRIVER_CLASS = "com.mysql.jdbc.Driver"; 
