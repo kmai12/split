@@ -27,6 +27,8 @@
 <h:inputText value="#{userManager.currentUser.email}"/><br/>
 <h:commandButton value="Submit" action="#{userManager.registerUser}"/>
 <h:commandButton value="Go back" action="start-page"/>
+<br/>
+<h:outputLabel value="#{userManager.statusMessage}"/>
 </h:form>
 </fieldset>
 </div>

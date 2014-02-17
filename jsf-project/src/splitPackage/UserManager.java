@@ -17,77 +17,173 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 
-
-/**
- * @author splitIt
- * The class that drives the app.
- * Is in charge of account management, creating/paying bills, etc.
+/**<p>This class is the main controller of the application. It is in charge of account
+ * management, creating/paying bills, etc.</p>
+ * @author CS48, W14, G03
  */
 @ManagedBean
-
 public class UserManager {
-	private User currentUser;			//Current user logged in
-	private String statusMessage;		//message that can be displayed on webpages i.e "Invalid Password!"
-	
+	private User currentUser; // Current user logged in
+	private String statusMessage; // message that can be displayed on webpages
+									// i.e "Invalid Password!"
+	/** 
+	 * Default no-arg constructor. Set the current User to a new default User. 
+	 */
 	public UserManager() {
 		currentUser = new User();
 	}
-
-	public UserManager(User currentUser) {this.currentUser = currentUser;}
-
-	public User getCurrentUser(){return currentUser;}
 	
-	public void setCurrentUser(User u){ currentUser = u;}
+	/**
+	 * <p>One argument constructor. Set the current user to the current user running
+	 * the program.</p>
+	 * @param currentUser The current user of our programs
+	 */
+	public UserManager(User currentUser) {
+		this.currentUser = currentUser;
+	}
 	
-	public String getStatusMessage(){ return statusMessage;}
-	
-	public void setStatusMessage(String statusMessage) { this.statusMessage = statusMessage;}
-	
-	//Methods for Registration/Login
-	public String registerUser(){
-		
-		System.out.println(currentUser.getLast());
-		return "start-page";
+	/** Getter for current user.	
+		@return currentUser The current user of the program.
+    */
+	public User getCurrentUser() {
+		return currentUser;
+	}
+	/** Setter for current user.	
+		@param u The user that is currently using the program.
+	 */
+	public void setCurrentUser(User u) {
+		currentUser = u;
+	}
+	/**
+	 * Getter for statusMessage.
+	 * @return <p>statusMessage, A message that displays the status of the program. It 
+	 * informs the user of certain  problems or errors that need attention. (e.g.
+	 * "Invalid Password" or "Please enter a username.")</p>
+	 */
+	public String getStatusMessage() {
+		return statusMessage;
+	}
+	/**
+	 * Setter for statusMessage.
+	 * @param <p>statusMessage, A message that displays the status of the program. It 
+	 * informs the user of certain  problems or errors that need attention. (e.g.
+	 * "Invalid Password" or "Please enter a username.")</p>
+	 */
+	public void setStatusMessage(String statusMessage) {
+		this.statusMessage = statusMessage;
 	}
 
-	public String login(){
-		ResultSet rs = null;
-        Connection connection = null;
-        Statement statement = null; 
-        String usernameInput = currentUser.getUser();
-        
-        String query = "SELECT * FROM user WHERE user_name='" + usernameInput +"'";
-        try {
-            connection = JDBCSQLiteConnection.getConnection();
-            statement = connection.createStatement();
-            rs = statement.executeQuery(query);
-            if (rs.next()) {
-            	currentUser.setUser(rs.getString("user_name"));
-            	currentUser.setID(rs.getInt("user_id"));
-            	if(!(currentUser.getPw().equals(rs.getString("password")))){
-            		statusMessage = "Invalid Password!";
-            		return "start-page";
-            	}
-            	currentUser.setPw(rs.getString("password"));
-            	currentUser.setFirst(rs.getString("first"));
-            	currentUser.setLast(rs.getString("last"));
-            	currentUser.setEmail(rs.getString("email"));
-            }
-            else{
-        		statusMessage = "Username " + usernameInput + " not found!";
-        		return "start-page";
-        	}
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            if (connection != null) {
-                try {
-                    connection.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+	// Methods for Registration/Login
+	/**
+	 * This method is used to register a new user.
+	 * @return a string that directs you to the proper page. Either the start page or
+	 * the registration page.
+	 */
+	public String registerUser() {
+		Connection connection=null;
+		ResultSet rs=null;
+		Statement statement=null;
+		//query is a SQL statement used to insert elements into user
+		String query = "INSERT into user(user_id,user_name,password,first,last,email) "
+				+ "values(null,'"
+				+ currentUser.getUser()
+				+ "','"
+				+ currentUser.getPw()
+				+ "','"
+				+ currentUser.getFirst()
+				+ "','"
+				+ currentUser.getLast()
+				+ "','"
+				+ currentUser.getEmail()
+				+ "');";
+
+		try {
+			connection = JDBCSQLiteConnection.getConnection();
+			statement = connection.createStatement();
+			// check for duplicate user
+			String checkDuplicateUser = "SELECT * FROM user WHERE user_name='"
+					+ currentUser.getUser() + "'";
+			rs = statement.executeQuery(checkDuplicateUser);
+			if (rs.next()) {
+				if (currentUser.getUser().equals(rs.getString("user_name"))) {
+					statusMessage = "Username is already in use. Please enter another username.";
+					return "register";
+				}
+			} //end check for duplicate user
+			
+			// check if any of the fields are empty
+			if (currentUser.getUser() == "") {
+				statusMessage = "Please enter a username.";
+				return "register";
+			}
+			if (currentUser.getPw() == "") {
+				statusMessage = "Please enter a password.";
+				return "register";
+			}
+			if (currentUser.getFirst() == "") {
+				statusMessage = "Please enter your first name.";
+				return "register";
+			}
+			if (currentUser.getLast() == "") {
+				statusMessage = "Please enter your last name.";
+				return "register";
+			}
+			if (currentUser.getEmail() == "") {
+				statusMessage = "Please enter your email address.";
+				return "register";
+			} //end check for empty fields
+			
+			statement.executeUpdate(query);
+			statement.close();
+			connection.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return "front-page";
+
+	}
+	/**
+	 * This method is used to login the a user.
+	 * @return a string that directs you to the proper page. Either the start page or
+	 * the login page.
+	 */
+	public String login() {
+		Connection connection=null;
+		ResultSet rs=null;
+		Statement statement=null;
+		String usernameInput = currentUser.getUser();
+		String query = "SELECT * FROM user WHERE user_name='" + usernameInput
+				+ "'";
+		try {
+			connection = JDBCSQLiteConnection.getConnection();
+			statement = connection.createStatement();
+			rs = statement.executeQuery(query);
+			if (rs.next()) {
+				currentUser.setUser(rs.getString("user_name"));
+				currentUser.setID(rs.getInt("user_id"));
+				if (!(currentUser.getPw().equals(rs.getString("password")))) {
+					statusMessage = "Invalid Password!";
+					return "start-page";
+				}
+				currentUser.setPw(rs.getString("password"));
+				currentUser.setFirst(rs.getString("first"));
+				currentUser.setLast(rs.getString("last"));
+				currentUser.setEmail(rs.getString("email"));
+			} else {
+				statusMessage = "Username " + usernameInput + " not found!";
+				return "start-page";
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 		return "front-page";
 	}
 
