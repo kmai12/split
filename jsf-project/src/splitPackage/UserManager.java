@@ -102,46 +102,53 @@ public class UserManager {
 			statement = connection.createStatement();
 			// check for duplicate user
 			String checkDuplicateUser = "SELECT * FROM user WHERE user_name='"
-					+ currentUser.getUser() + "'";
+					+ currentUser.getUser().toLowerCase() + "'";
 			rs = statement.executeQuery(checkDuplicateUser);
-			if (rs.next()) {
-				if (currentUser.getUser().equals(rs.getString("user_name"))) {
-					statusMessage = "Username is already in use. Please enter another username.";
+						if (rs.next()) {
+				if ((currentUser.getUser().toLowerCase()).equals(rs.getString("user_name").toLowerCase())) {
+					statusMessage = currentUser.getUser() + " is already in use. Please enter another username.";
 					return "register";
 				}
 			} //end check for duplicate user
 			
-			// check if any of the fields are empty
-			if (currentUser.getUser() == "") {
-				statusMessage = "Please enter a username.";
+			// check if any of the fields are empty or contain leading/trailing spaces
+			if (currentUser.getUser().trim().length() == 0 || currentUser.getUser().trim().length() != currentUser.getUser().length()) {
+				statusMessage = "Please enter a valid username.";
 				return "register";
 			}
-			if (currentUser.getPw() == "") {
-				statusMessage = "Please enter a password.";
+			if (currentUser.getPw().trim().length() == 0  || currentUser.getPw().trim().length() != currentUser.getPw().length()) {
+				statusMessage = "Please enter a valid password.";
 				return "register";
 			}
-			if (currentUser.getFirst() == "") {
-				statusMessage = "Please enter your first name.";
+			if (currentUser.getFirst().trim().length() == 0 || currentUser.getFirst().trim().length() != currentUser.getFirst().length()){
+				statusMessage = "Please enter a valid first name.";
 				return "register";
 			}
-			if (currentUser.getLast() == "") {
-				statusMessage = "Please enter your last name.";
+			if (currentUser.getLast().trim().length() == 0 || currentUser.getLast().trim().length() != currentUser.getLast().length()) {
+				statusMessage = "Please enter a valid last name.";
 				return "register";
 			}
-			if (currentUser.getEmail() == "") {
-				statusMessage = "Please enter your email address.";
+			if (currentUser.getEmail().trim().length() == 0 || currentUser.getEmail().trim().length() != currentUser.getEmail().length()) {
+				statusMessage = "Please enter a valid email address.";
 				return "register";
-			} //end check for empty fields
+			} //end check for empty fields and/or leading/trailing white spaces
 			
 			statement.executeUpdate(query);
-			statement.close();
-			connection.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}finally{
+			if (connection != null) {
+				try {			
+					statement.close();
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		return "front-page";
-
 	}
+	
 	/**
 	 * This method is used to login the a user.
 	 * @return a string that directs you to the proper page. Either the start page or
