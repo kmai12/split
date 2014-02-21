@@ -1,10 +1,11 @@
 package splitPackage;
 
 import javax.faces.bean.*;
+import java.io.Serializable;
 
 
 @ManagedBean
-public class Bill {
+public class Bill implements Serializable {
 	public Bill(){
 	}
 

@@ -4,18 +4,10 @@ import javax.faces.bean.*;
 
 import splitPackageJDBC.JDBCSQLiteConnection;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.PrintWriter;
 import java.io.Serializable;
 /**<p>This class is the main controller of the application. It is in charge of account
  * management, creating/paying bills, etc.</p>
@@ -210,20 +202,11 @@ public class UserManager implements Serializable{
 		//Sets BillManager's currentUser to the current user
 		User temp = new User(currentUser);
 		bm.setCurrentUser(temp);
+		bm.setbList(bm.getbList());
+		
+		System.out.println(bm.getCurrentUser().getUser());
+		System.out.println(bm.getbList().size());
 		return "front-page";
-	}
-
-	// after creating a bill return the user home
-	public String createBill(Bill b, User currentUser) {
-		return "home";
-	}
-
-	public String payBill() {
-		return "stub";
-	}
-
-	public String removeBill() {
-		return "stub";
 	}
 
 }

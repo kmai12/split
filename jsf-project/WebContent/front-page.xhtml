@@ -1,58 +1,70 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html">
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
 <h:head>
-<title>Split start-page</title>
-<link href="./css/styles.css" 
-      rel="stylesheet" type="text/css"/> <!--  Assumes you have styles.css in WebContent/css/ -->
+	<title>Split start-page</title>
+	<link href="./css/styles.css" rel="stylesheet" type="text/css" />
+	<!--  Assumes you have styles.css in WebContent/css/ -->
 </h:head>
 
 <h:body>
-<h1 class="title">Welcome to Spl/it</h1><br/>
-<!-- Other HTML tags and non-input JSF elements here -->
-<div align="center">
+	<h1 class="title">Welcome to Split It</h1>
+	<br />
+	<!-- Other HTML tags and non-input JSF elements here -->
+	<div align="center">
 
-<fieldset>
-<legend>Welcome #{userManager.currentUser.user}</legend>
-<h:form>
-<br/>
-What would you like to do today? <br/>
-<h:commandButton value="Archive" action="archive"/>
-<h:commandButton value="Payment History" action="paymenthistory"/>
-<h:commandButton value="Back" action="start-page"/>
-</h:form>
-</fieldset>
+		<fieldset>
+			<legend>Welcome #{userManager.currentUser.user}</legend>
+			<h:form>
+				<br />
+What would you like to do today? <br />
+				<h:commandButton value="Archive" action="archive" />
+				<h:commandButton value="Payment History" action="paymenthistory" />
+				<h:commandButton value="Back" action="start-page" />
+			</h:form>
+		</fieldset>
 
-<fieldset>
-<h:form>
-<legend>Your Bills</legend>
+		<fieldset>
+			<h:form>
+				<legend>Your Bills</legend>
 TEST BILL INSERT CHART HERE
-<h:commandButton value="details" action="billdetailspage"/>
-<br/>
-<h:commandButton value="Add Bill" action="addbill"/>
-<h:commandButton value="Remove Selected" action="removebill"/>
-</h:form>
-</fieldset>
+<h:commandButton value="details" action="billdetailspage" />
+				<br />
+				<h:commandButton value="Add Bill" action="addbill" />
+				<h:commandButton value="Remove Selected" action="removebill" />
+			</h:form>
+		</fieldset>
+	</div>
 
-<fieldset>
-<h:form>
-<legend>Pending Payments</legend>
-SAMPLE PAYMENT 00/00/0000 FROM $$$$		
-<textarea
-	name="textarea1"
-	cols="10"
-	rows="1"
-	wrap="off">
-STATUS
-</textarea>
-<h:commandButton value="Sent Payment" action="paymentsent"/>
-</h:form>
-</fieldset>
+	<h2>Bills</h2>
 
-</div>
-<!-- This means bean named "yourBean" must have method named "getYourProperty" -->
-<!--  #{yourBean.yourProperty} -->
 
-<!-- Other HTML tags and non-input JSF elements here -->
-</h:body></html>
+	<h:form>
+		<h:dataTable border="1" value="#{userManager.bm.bList}" var="item">
+			<h:column>
+				<f:facet name="header">Bill_ID</f:facet>
+			#{item.getBill_ID()}
+			</h:column>
+			<h:column>
+				<f:facet name="header">Bill Name</f:facet>
+			#{item.getBill_name()}
+			</h:column>
+			<h:column>
+				<f:facet name="header">Sender_ID</f:facet>
+			#{item.getSender_ID()}</h:column>
+			<h:column>
+				<f:facet name="header">Cost</f:facet>
+			#{item.getCost()}
+			</h:column>
+		</h:dataTable>
+	</h:form>
+
+
+	<!-- This means bean named "yourBean" must have method named "getYourProperty" -->
+	<!--  #{yourBean.yourProperty} -->
+
+	<!-- Other HTML tags and non-input JSF elements here -->
+</h:body>
+</html>

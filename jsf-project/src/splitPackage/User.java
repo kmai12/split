@@ -1,12 +1,10 @@
 package splitPackage;
 
 import javax.faces.bean.*;
-
-import java.util.ArrayList;
+import java.io.Serializable;
 
 @ManagedBean
-
-public class User{
+public class User implements Serializable{
   private String user;
   private String pw;
   private String email;
@@ -47,11 +45,11 @@ public class User{
   public String getEmail(){ return email;};
   public void setEmail(String email){ this.email = email;}
   
-  
+  /*
   public String toString() {
 	  	return this.user + "	" + this.pw;  
   }
-
+*/
 
 }
 	

@@ -1,13 +1,10 @@
 package splitPackage;
 
 import javax.faces.bean.*;
-import java.util.List;
-import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.List;
 import java.io.Serializable;
-
 import splitPackageJDBC.JDBCSQLiteConnection;
-
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,12 +14,14 @@ import java.sql.Statement;
 public class BillManager implements Serializable{
 	User currentUser;
 	Bill currentBill;
+	List<Bill> bList;
 	String statusMessage;
 	String recipientList;
 
 	//Constructors
 	public BillManager() {
 		currentBill = new Bill();
+		bList = new ArrayList<Bill>();
 	}
 
 	public BillManager(User u){
@@ -116,8 +115,8 @@ public class BillManager implements Serializable{
 						+ recipientID + ")";
 				statement.executeUpdate(query);
 			}
-						
-		
+
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}finally{
@@ -130,8 +129,8 @@ public class BillManager implements Serializable{
 				}
 			}
 		}
-		statusMessage = "";
-		return "front-page";
+		statusMessage = "Success!";
+		return "addbill";
 	}
 
 
@@ -154,4 +153,54 @@ public class BillManager implements Serializable{
 		return cost;
 	}
 
+	public void setbList(List<Bill> bList) {
+		this.bList = bList;
+	}
+
+	public List<Bill> getbList(){
+		List<Bill> bList = new ArrayList<Bill>();
+		Connection connection=null;
+		ResultSet rs=null;
+		ResultSet rs2 = null;
+		Statement statement=null;
+		try {
+			connection = JDBCSQLiteConnection.getConnection();
+			statement = connection.createStatement();
+			String query = "SELECT * FROM bill_recipient WHERE recipient_id="
+					+ currentUser.getID();
+			rs = statement.executeQuery(query);
+			while(rs.next()){
+				rs.getInt("recipient_id");
+				query = "SELECT * FROM bill WHERE bill_id=" + rs.getInt("bill_id");
+				rs2 = statement.executeQuery(query);
+				while(rs2.next()){
+					Bill bill = new Bill();
+					bill.setBill_ID(rs2.getInt("bill_id"));
+					bill.setBill_name(rs2.getString("bill_name"));
+					bill.setSender_ID(rs2.getInt("sender_id"));
+					bill.setRecipient_ID(rs2.getInt("recipient_id"));
+					bill.setCost(rs2.getDouble("cost"));
+					bill.setTotal(rs2.getDouble("total"));
+					bill.setStatus(rs2.getString("status"));
+					bill.setNumRecipients(rs2.getInt("num_recipients"));
+					bList.add(bill);
+					System.out.println("This Loop");			
+				}
+
+			}
+		}catch(SQLException ex){
+			ex.printStackTrace();
+		}finally{
+			if (connection != null) {
+				try {			
+					statement.close();
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return bList;
+	}
 }
+
