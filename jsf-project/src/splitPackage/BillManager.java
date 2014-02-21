@@ -100,11 +100,9 @@ public class BillManager implements Serializable{
 			//bill_id, bill_name, sender_id, recipient_id, cost, total, status, date, comment
 			query = "INSERT INTO bill VALUES(null,'" + currentBill.getBill_name() +"',"
 					+ currentUser.getID() + "," + "null," + currentBill.getCost() + ","
-					+ currentBill.getTotal() + ",'Owed'," + ",null," + "'null',"
+					+ currentBill.getTotal() + ",'Owed'," + "null," + "null,"
 					+ currentBill.getNumRecipients() + ")";
-			System.out.print(query);
-			//rs = statement.executeQuery(query);
-			/*
+			statement.executeUpdate(query);
 			query = "SELECT * FROM BILL WHERE bill_name='" + currentBill.getBill_name() +"'";
 			rs = statement.executeQuery(query);
 			currentBill.setBill_ID(rs.getInt("bill_id"));
@@ -116,8 +114,9 @@ public class BillManager implements Serializable{
 				recipientID = rs.getInt("user_id");
 				query = "INSERT INTO bill_recipient VALUES(" + currentBill.getBill_ID() + ","
 						+ recipientID + ")";
-						}
-						*/
+				statement.executeUpdate(query);
+			}
+						
 		
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -132,11 +131,11 @@ public class BillManager implements Serializable{
 			}
 		}
 		statusMessage = "";
-		return "addbill";
+		return "front-page";
 	}
 
 
-	/**
+	/**Helper Function
 	 * @param list
 	 * @return true if duplicate exists, else returns false
 	 */
