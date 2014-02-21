@@ -13,18 +13,26 @@ public class User{
   private String first;
   private String last;
   private int id;
-  private ArrayList<Bill> bills = new ArrayList<Bill>();
   
   //Constructors
   public User() {
-	  user = null;
-	  pw = null;
+
   }
   public User(String user, String pw, String email) {
 	  this.user = user;
 	  this.pw = pw;
 	  this.email = email;
   }
+  
+  public User(User u){
+	  this.user = u.getUser();
+	  this.pw = u.getPw();
+	  this.email = u.getEmail();
+	  this.first = u.getFirst();
+	  this.last = u.getLast();
+	  this.id = u.getID();
+  }
+  
   //Getters and Setters
   public String getUser(){ return (user); }
   public void setUser(String user){ this.user = user.trim(); }
@@ -38,25 +46,12 @@ public class User{
   public void setLast(String l){ this.last = l;};
   public String getEmail(){ return email;};
   public void setEmail(String email){ this.email = email;}
-  public ArrayList<Bill> getBills() { return this.bills; }
   
   
   public String toString() {
 	  	return this.user + "	" + this.pw;  
   }
-   
-  //User Actions
-  public void addBill(Bill b) { bills.add(b); }
 
-   public void resetpw(){
-	  //stub
-  }
-  
-  public String logout(){
-	  return "start-page";
-  }
-  
-  
-  
+
 }
 	

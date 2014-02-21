@@ -16,14 +16,16 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.PrintWriter;
-
+import java.io.Serializable;
 /**<p>This class is the main controller of the application. It is in charge of account
  * management, creating/paying bills, etc.</p>
  * @author CS48, W14, G03
  */
 @ManagedBean
-public class UserManager {
+@SessionScoped
+public class UserManager implements Serializable{
 	private User currentUser; // Current user logged in
+	private BillManager bm;
 	private String statusMessage; // message that can be displayed on webpages
 									// i.e "Invalid Password!"
 	/** 
@@ -31,6 +33,7 @@ public class UserManager {
 	 */
 	public UserManager() {
 		currentUser = new User();
+		bm = new BillManager();
 	}
 	
 	/**
@@ -73,6 +76,14 @@ public class UserManager {
 		this.statusMessage = statusMessage;
 	}
 
+	public BillManager getBm() {
+		return bm;
+	}
+
+	public void setBm(BillManager bm) {
+		this.bm = bm;
+	}
+
 	// Methods for Registration/Login
 	/**
 	 * This method is used to register a new user.
@@ -112,23 +123,28 @@ public class UserManager {
 			} //end check for duplicate user
 			
 			// check if any of the fields are empty or contain leading/trailing spaces
-			if (currentUser.getUser().trim().length() == 0 || currentUser.getUser().trim().length() != currentUser.getUser().length()) {
+			if (currentUser.getUser().trim().length() == 0 ||
+					currentUser.getUser().trim().length() != currentUser.getUser().length()) {
 				statusMessage = "Please enter a valid username.";
 				return "register";
 			}
-			if (currentUser.getPw().trim().length() == 0  || currentUser.getPw().trim().length() != currentUser.getPw().length()) {
+			if (currentUser.getPw().trim().length() == 0  ||
+					currentUser.getPw().trim().length() != currentUser.getPw().length()) {
 				statusMessage = "Please enter a valid password.";
 				return "register";
 			}
-			if (currentUser.getFirst().trim().length() == 0 || currentUser.getFirst().trim().length() != currentUser.getFirst().length()){
+			if (currentUser.getFirst().trim().length() == 0 ||
+					currentUser.getFirst().trim().length() != currentUser.getFirst().length()){
 				statusMessage = "Please enter a valid first name.";
 				return "register";
 			}
-			if (currentUser.getLast().trim().length() == 0 || currentUser.getLast().trim().length() != currentUser.getLast().length()) {
+			if (currentUser.getLast().trim().length() == 0 ||
+					currentUser.getLast().trim().length() != currentUser.getLast().length()) {
 				statusMessage = "Please enter a valid last name.";
 				return "register";
 			}
-			if (currentUser.getEmail().trim().length() == 0 || currentUser.getEmail().trim().length() != currentUser.getEmail().length()) {
+			if (currentUser.getEmail().trim().length() == 0 || 
+					currentUser.getEmail().trim().length() != currentUser.getEmail().length()) {
 				statusMessage = "Please enter a valid email address.";
 				return "register";
 			} //end check for empty fields and/or leading/trailing white spaces
@@ -146,7 +162,7 @@ public class UserManager {
 				}
 			}
 		}
-		return "front-page";
+		return "start-page";
 	}
 	
 	/**
@@ -191,12 +207,14 @@ public class UserManager {
 				}
 			}
 		}
+		//Sets BillManager's currentUser to the current user
+		User temp = new User(currentUser);
+		bm.setCurrentUser(temp);
 		return "front-page";
 	}
 
 	// after creating a bill return the user home
 	public String createBill(Bill b, User currentUser) {
-		currentUser.addBill(b);
 		return "home";
 	}
 

@@ -15,15 +15,30 @@
 <h:form>
 <legend>Please enter the bill information below.</legend>
 <br/>
-Name:
-<h:inputText/><br/>
-Total:
-<h:inputText/><br/>
+Bill Name:
+<h:inputText value="#{userManager.bm.currentBill.bill_name}"/><br/>
+Total Cost:
+<h:inputText value="#{userManager.bm.currentBill.total}"/><br/>
+
+    <h:body>
+	  <h:form>
+	  Recipients: (Separate each recipient with a new line or spaces)
+		<table>
+    		<tr>
+    		  <td valign="top"/>
+    		  <td><h:inputTextarea value="#{userManager.bm.recipientList}" cols="30" rows="10" />
+    		  </td>
+    		</tr>
+    		</table>
+    		<h:commandButton value="Submit" action="#{userManager.bm.createBill()}" />
+    		<h:commandButton value="Back" action="front-page"/>
+    	  </h:form>
+    </h:body>
+#{userManager.bm.recipientList}
+<br/>
+<h:outputLabel value="#{userManager.bm.statusMessage}"/>
 Include Self?
 <input name="includeselfbox" type="checkbox" value="2" id="includeself"/>
-<br/>
-<h:commandButton value="add"/>
-<h:commandButton value="back" action="front-page"/>
 <br/>
 </h:form>
 </fieldset>
