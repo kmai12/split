@@ -163,16 +163,20 @@ public class BillManager implements Serializable{
 		ResultSet rs=null;
 		ResultSet rs2 = null;
 		Statement statement=null;
+		Statement statement2=null;
 		try {
 			connection = JDBCSQLiteConnection.getConnection();
+			//YOU NEED 2 SEPARATE STATEMENTS FOR 2 CONCURRING QUERY EXECUTIONS!!
 			statement = connection.createStatement();
+			statement2 = connection.createStatement();
 			String query = "SELECT * FROM bill_recipient WHERE recipient_id="
 					+ currentUser.getID();
+		
 			rs = statement.executeQuery(query);
 			while(rs.next()){
-				rs.getInt("recipient_id");
-				query = "SELECT * FROM bill WHERE bill_id=" + rs.getInt("bill_id");
-				rs2 = statement.executeQuery(query);
+				//System.out.println(rs.getInt("bill_id"));
+				String query2 = "SELECT * FROM bill WHERE bill_id=" + rs.getInt("bill_id");
+				rs2 = statement2.executeQuery(query2);
 				while(rs2.next()){
 					Bill bill = new Bill();
 					bill.setBill_ID(rs2.getInt("bill_id"));
@@ -183,8 +187,7 @@ public class BillManager implements Serializable{
 					bill.setTotal(rs2.getDouble("total"));
 					bill.setStatus(rs2.getString("status"));
 					bill.setNumRecipients(rs2.getInt("num_recipients"));
-					bList.add(bill);
-					System.out.println("This Loop");			
+					bList.add(bill);	
 				}
 
 			}

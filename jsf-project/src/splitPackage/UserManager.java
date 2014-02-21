@@ -202,10 +202,8 @@ public class UserManager implements Serializable{
 		//Sets BillManager's currentUser to the current user
 		User temp = new User(currentUser);
 		bm.setCurrentUser(temp);
-		bm.setbList(bm.getbList());
+		//bm.setbList(bm.getbList());
 		
-		System.out.println(bm.getCurrentUser().getUser());
-		System.out.println(bm.getbList().size());
 		return "front-page";
 	}
 
