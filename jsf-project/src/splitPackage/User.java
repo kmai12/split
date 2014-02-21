@@ -3,6 +3,10 @@ package splitPackage;
 import javax.faces.bean.*;
 import java.io.Serializable;
 
+/**
+ * User class that contains all the information of a user
+ * 
+ */
 @ManagedBean
 public class User implements Serializable {
 	private String user;
@@ -80,9 +84,5 @@ public class User implements Serializable {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
-	/*
-	 * public String toString() { return this.user + "	" + this.pw; }
-	 */
 
 }

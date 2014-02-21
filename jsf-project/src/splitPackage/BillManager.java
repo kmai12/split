@@ -10,14 +10,22 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+/**
+ * Class that manages bill actions
+ *
+ */
+/**
+ * @author Kevin
+ * 
+ */
 @ManagedBean
 public class BillManager implements Serializable {
-	User currentUser;
-	Bill currentBill;
-	List<Bill> bList;
-	String statusMessage;
-	String recipientList;
-	String removeID;
+	private User currentUser;
+	private Bill currentBill;
+	private List<Bill> bList;
+	private String statusMessage;
+	private String recipientList;
+	private String removeID;
 
 	// Constructors
 	public BillManager() {
@@ -70,7 +78,16 @@ public class BillManager implements Serializable {
 		this.removeID = removeID;
 	}
 
+	public void setbList(List<Bill> bList) {
+		this.bList = bList;
+	}
+
 	// Methods
+	/**
+	 * Creates a bill.
+	 * 
+	 * @return the name of the web-page to be directed to
+	 */
 	public String createBill() {
 		Connection connection = null;
 		ResultSet rs = null;
@@ -171,30 +188,11 @@ public class BillManager implements Serializable {
 	}
 
 	/**
-	 * Helper Function
+	 * Getter for bList connects to the database and obtains all the bills owned
+	 * by the user.
 	 * 
-	 * @param list
-	 * @return true if duplicate exists, else returns false
+	 * @return List of bills.
 	 */
-	private boolean duplicates(ArrayList<String> list) {
-		for (int j = 0; j < list.size(); j++) {
-			for (int k = j + 1; k < list.size(); k++) {
-				if (k != j && list.get(k).equals(list.get(j)))
-					return true;
-			}
-		}
-		return false;
-	}
-
-	private double split(int recipientAmount, double total) {
-		double cost = total / recipientAmount;
-		return cost;
-	}
-
-	public void setbList(List<Bill> bList) {
-		this.bList = bList;
-	}
-
 	public List<Bill> getbList() {
 		List<Bill> bList = new ArrayList<Bill>();
 		Connection connection = null;
@@ -246,6 +244,11 @@ public class BillManager implements Serializable {
 		return bList;
 	}
 
+	/**
+	 * Removes selected bill in the database from the user.
+	 * 
+	 * @return name of html page to direct to.
+	 */
 	public String payBill() {
 		Connection connection = null;
 		Statement statement = null;
@@ -270,7 +273,23 @@ public class BillManager implements Serializable {
 
 			}
 		}
-		//statusMessage = "Successfully Paid!";
+		// statusMessage = "Successfully Paid!";
 		return "front-page";
+	}
+
+	// Helper Function
+	private boolean duplicates(ArrayList<String> list) {
+		for (int j = 0; j < list.size(); j++) {
+			for (int k = j + 1; k < list.size(); k++) {
+				if (k != j && list.get(k).equals(list.get(j)))
+					return true;
+			}
+		}
+		return false;
+	}
+
+	private double split(int recipientAmount, double total) {
+		double cost = total / recipientAmount;
+		return cost;
 	}
 }

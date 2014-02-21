@@ -3,10 +3,13 @@ package splitPackage;
 import javax.faces.bean.*;
 import java.io.Serializable;
 
-
+/**
+ * Bill class that contains all the information of the bill
+ *
+ */
 @ManagedBean
 public class Bill implements Serializable {
-	public Bill(){
+	public Bill() {
 	}
 
 	public Bill(int bill_id, int sender_id, int recipient_id, String bill_name,
@@ -24,7 +27,7 @@ public class Bill implements Serializable {
 		this.numRecipients = numRecipients;
 	}
 
-	//Attributes
+	// Attributes
 	private int bill_id;
 	private int sender_id;
 	private int recipient_id;
@@ -36,26 +39,85 @@ public class Bill implements Serializable {
 	private String comment;
 	private int numRecipients;
 
-	//Getters and Setters
-	public int getBill_ID() {return bill_id; }
-	public void setBill_ID(int bill_ID) { this.bill_id = bill_ID;}
-	public int getSender_ID() {	return sender_id;}
-	public void setSender_ID(int sender_ID) {	this.sender_id = sender_ID;}
-	public int getRecipient_ID() {return recipient_id;}
-	public void setRecipient_ID(int recipient_ID) {	this.recipient_id = recipient_ID;}
-	public String getBill_name() {	return bill_name;}
-	public void setBill_name(String bill_name) {	this.bill_name = bill_name;}
-	public double getTotal() {	return total;}
-	public void setTotal(double total) {this.total = total;}
-	public double getCost() {return cost;}
-	public void setCost(double cost) {this.cost = cost;}
-	public String getDate() {return date;}
-	public void setDate(String date) {this.date = date;}
-	public String getStatus() {return status;}
-	public void setStatus(String status) {this.status = status;}
-	public String getComment() {return comment;}
-	public void setComment(String comment) {this.comment = comment;}
-	public int getNumRecipients(){return this.numRecipients;}
-	public void setNumRecipients(int r){ this.numRecipients = r;};
+	// Getters and Setters
+	public int getBill_ID() {
+		return bill_id;
+	}
+
+	public void setBill_ID(int bill_ID) {
+		this.bill_id = bill_ID;
+	}
+
+	public int getSender_ID() {
+		return sender_id;
+	}
+
+	public void setSender_ID(int sender_ID) {
+		this.sender_id = sender_ID;
+	}
+
+	public int getRecipient_ID() {
+		return recipient_id;
+	}
+
+	public void setRecipient_ID(int recipient_ID) {
+		this.recipient_id = recipient_ID;
+	}
+
+	public String getBill_name() {
+		return bill_name;
+	}
+
+	public void setBill_name(String bill_name) {
+		this.bill_name = bill_name;
+	}
+
+	public double getTotal() {
+		return total;
+	}
+
+	public void setTotal(double total) {
+		this.total = total;
+	}
+
+	public double getCost() {
+		return cost;
+	}
+
+	public void setCost(double cost) {
+		this.cost = cost;
+	}
+
+	public String getDate() {
+		return date;
+	}
+
+	public void setDate(String date) {
+		this.date = date;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+
+	public int getNumRecipients() {
+		return this.numRecipients;
+	}
+
+	public void setNumRecipients(int r) {
+		this.numRecipients = r;
+	};
 
 }

@@ -1,35 +1,39 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html">
+	xmlns:h="http://java.sun.com/jsf/html">
 <h:head>
-<title>Split start-page</title>
-<link href="./css/styles.css" 
-      rel="stylesheet" type="text/css"/> <!--  Assumes you have styles.css in WebContent/css/ -->
+	<title>Split start-page</title>
+	<link href="./css/styles.css" rel="stylesheet" type="text/css" />
+	<!--  Assumes you have styles.css in WebContent/css/ -->
 </h:head>
 <h:body>
-<h1 class="title">Welcome to Split</h1><br/>
-<!-- Other HTML tags and non-input JSF elements here -->
-<div align="center">
-<fieldset>
-<legend>Login</legend>
-<h:form>
-<br/>
-<h:outputLabel value="Username: " style="font-weight:bold" />
-<h:inputText value="#{userManager.currentUser.user}"/><br/>
-<h:outputLabel value="Password: " style="font-weight:bold" />
-<h:inputSecret type="password" value="#{userManager.currentUser.pw}"/><br/>
-<h:commandButton value="Go" action="#{userManager.login}"/>
-<h:commandButton value="Register" action="register"/>
-<h:commandButton value="Forgot PW?" />
-<br/>
-<h:outputLabel value="#{userManager.statusMessage}"/>
-</h:form>
-</fieldset>
-</div>
+	<h1 class="title">Welcome to Split</h1>
+	<br />
+	<!-- Other HTML tags and non-input JSF elements here -->
+	<div align="center">
+		<fieldset>
+			<legend>Login</legend>
+			<h:form>
+				<br />
+				<h:outputLabel value="Username: " style="font-weight:bold" />
+				<h:inputText value="#{userManager.currentUser.user}" />
+				<br />
+				<h:outputLabel value="Password: " style="font-weight:bold" />
+				<h:inputSecret type="password" value="#{userManager.currentUser.pw}" />
+				<br />
+				<h:commandButton value="Go" action="#{userManager.login}" />
+				<h:commandButton value="Register" action="register" />
+				<h:commandButton value="Forgot PW?" />
+				<br />
+				<h:outputLabel value="#{userManager.statusMessage}" />
+			</h:form>
+		</fieldset>
+	</div>
 
-<!-- This means bean named "yourBean" must have method named "getYourProperty" -->
-<!--  #{yourBean.yourProperty} -->
+	<!-- This means bean named "yourBean" must have method named "getYourProperty" -->
+	<!--  #{yourBean.yourProperty} -->
 
-<!-- Other HTML tags and non-input JSF elements here -->
-</h:body></html>
+	<!-- Other HTML tags and non-input JSF elements here -->
+</h:body>
+</html>

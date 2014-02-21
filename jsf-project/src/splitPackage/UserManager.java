@@ -13,10 +13,8 @@ import java.io.Serializable;
 /**
  * <p>
  * This class is the main controller of the application. It is in charge of
- * account management, creating/paying bills, etc.
+ * account management, using BillManager to manage bills, etc.
  * </p>
- * 
- * @author CS48, W14, G03
  */
 @ManagedBean
 @SessionScoped
@@ -84,10 +82,10 @@ public class UserManager implements Serializable {
 	 * Setter for statusMessage.
 	 * 
 	 * @param <p>
-	 *        statusMessage, A message that displays the status of the program.
-	 *        It informs the user of certain problems or errors that need
-	 *        attention. (e.g. "Invalid Password" or "Please enter a username.")
-	 *        </p>
+	 *            statusMessage, A message that displays the status of the
+	 *            program. It informs the user of certain problems or errors
+	 *            that need attention. (e.g. "Invalid Password" or
+	 *            "Please enter a username.") </p>
 	 */
 	public void setStatusMessage(String statusMessage) {
 		this.statusMessage = statusMessage;
@@ -198,7 +196,7 @@ public class UserManager implements Serializable {
 	 *         page or the login page.
 	 */
 	public String login() {
-		
+
 		Connection connection = null;
 		ResultSet rs = null;
 		Statement statement = null;

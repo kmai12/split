@@ -1,46 +1,52 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html">
+	xmlns:h="http://java.sun.com/jsf/html">
 <h:head>
-<title>addbill</title>
-<link href="./css/styles.css" 
-      rel="stylesheet" type="text/css"/> <!--  Assumes you have styles.css in WebContent/css/ -->
+	<title>addbill</title>
+	<link href="./css/styles.css" rel="stylesheet" type="text/css" />
+	<!--  Assumes you have styles.css in WebContent/css/ -->
 </h:head>
 <h:body>
-<h1 class="title">Add a bill</h1><br/>
-<!-- Other HTML tags and non-input JSF elements here -->
-<div align="center">
-<fieldset>
-<h:form>
-<legend>Please enter the bill information below.</legend>
-<br/>
+	<h1 class="title">Add a bill</h1>
+	<br />
+	<!-- Other HTML tags and non-input JSF elements here -->
+	<div align="center">
+		<fieldset>
+			<h:form>
+				<legend>Please enter the bill information below.</legend>
+				<br />
 Bill Name:
-<h:inputText value="#{userManager.bm.currentBill.bill_name}"/><br/>
+<h:inputText value="#{userManager.bm.currentBill.bill_name}" />
+				<br />
 Total Cost:
-<h:inputText value="#{userManager.bm.currentBill.total}"/><br/>
+<h:inputText value="#{userManager.bm.currentBill.total}" />
+				<br />
 
-    <h:body>
-	  <h:form>
+				<h:body>
+					<h:form>
 	  Recipients: (Separate each recipient with a new line or spaces)
 		<table>
-    		<tr>
-    		  <td valign="top"/>
-    		  <td><h:inputTextarea value="#{userManager.bm.recipientList}" cols="30" rows="10" />
-    		  </td>
-    		</tr>
-    		</table>
-    		<h:commandButton value="Submit" action="#{userManager.bm.createBill()}" />
-    		<h:commandButton value="Back" action="front-page"/>
-    	  </h:form>
-    </h:body>
-<br/>
-<h:outputLabel value="#{userManager.bm.statusMessage}"/>
-</h:form>
-</fieldset>
-</div>
-<!-- This means bean named "yourBean" must have method named "getYourProperty" -->
-<!--  #{yourBean.yourProperty} -->
+							<tr>
+								<td valign="top" />
+								<td><h:inputTextarea
+										value="#{userManager.bm.recipientList}" cols="30" rows="10" />
+								</td>
+							</tr>
+						</table>
+						<h:commandButton value="Submit"
+							action="#{userManager.bm.createBill()}" />
+						<h:commandButton value="Back" action="front-page" />
+					</h:form>
+				</h:body>
+				<br />
+				<h:outputLabel value="#{userManager.bm.statusMessage}" />
+			</h:form>
+		</fieldset>
+	</div>
+	<!-- This means bean named "yourBean" must have method named "getYourProperty" -->
+	<!--  #{yourBean.yourProperty} -->
 
-<!-- Other HTML tags and non-input JSF elements here -->
-</h:body></html>
+	<!-- Other HTML tags and non-input JSF elements here -->
+</h:body>
+</html>
