@@ -22,18 +22,18 @@
 What would you like to do today? <br />
 				<h:commandButton value="Archive" action="archive" />
 				<h:commandButton value="Payment History" action="paymenthistory" />
-				<h:commandButton value="Back" action="start-page" />
+				<h:commandButton value="Log Out" action="start-page" />
 			</h:form>
 		</fieldset>
 
 		<fieldset>
 			<h:form>
 				<legend>Bill Options</legend>
-
-<h:commandButton value="details" action="billdetailspage" />
-				<br />
 				<h:commandButton value="Add Bill" action="addbill" />
-				<h:commandButton value="Remove Selected" action="removebill" />
+				<br />
+				<legend>Enter Bill_ID that you want to pay off</legend>
+				<h:commandButton value="Pay" action="#{userManager.bm.payBill}" />
+				<h:inputText value="#{userManager.bm.removeID}" />
 			</h:form>
 		</fieldset>
 	</div>
