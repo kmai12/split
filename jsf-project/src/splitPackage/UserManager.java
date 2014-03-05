@@ -142,33 +142,23 @@ public class UserManager implements Serializable {
 
 			// check if any of the fields are empty or contain leading/trailing
 			// spaces
-			if (currentUser.getUser().trim().length() == 0
-					|| currentUser.getUser().trim().length() != currentUser
-							.getUser().length()) {
+			if (checkValidInput(currentUser.getUser())) {
 				statusMessage = "Please enter a valid username.";
 				return "register";
 			}
-			if (currentUser.getPw().trim().length() == 0
-					|| currentUser.getPw().trim().length() != currentUser
-							.getPw().length()) {
+			if (checkValidInput(currentUser.getPw())) {
 				statusMessage = "Please enter a valid password.";
 				return "register";
 			}
-			if (currentUser.getFirst().trim().length() == 0
-					|| currentUser.getFirst().trim().length() != currentUser
-							.getFirst().length()) {
+			if (checkValidInput(currentUser.getFirst())) {
 				statusMessage = "Please enter a valid first name.";
 				return "register";
 			}
-			if (currentUser.getLast().trim().length() == 0
-					|| currentUser.getLast().trim().length() != currentUser
-							.getLast().length()) {
+			if (checkValidInput(currentUser.getLast())) {
 				statusMessage = "Please enter a valid last name.";
 				return "register";
 			}
-			if (currentUser.getEmail().trim().length() == 0
-					|| currentUser.getEmail().trim().length() != currentUser
-							.getEmail().length()) {
+			if (checkValidInput(currentUser.getEmail())) {
 				statusMessage = "Please enter a valid email address.";
 				return "register";
 			} // end check for empty fields and/or leading/trailing white spaces
@@ -187,6 +177,20 @@ public class UserManager implements Serializable {
 			}
 		}
 		return "start-page";
+	}
+	
+	/**
+	 * Helper function to check if user input is valid
+	 * @param str The user input.
+	 * @return
+	 */
+	public boolean checkValidInput(String str) {
+		boolean valid = false;
+		if (str.trim().length() == 0
+				|| str.trim().length() != str.length()) {
+			valid = true;
+		}
+		return valid;
 	}
 
 	/**
@@ -236,7 +240,6 @@ public class UserManager implements Serializable {
 		// Sets BillManager's currentUser to the current user
 		User temp = new User(currentUser);
 		bm.setCurrentUser(temp);
-		// bm.setbList(bm.getbList());
 
 		return "front-page";
 	}
