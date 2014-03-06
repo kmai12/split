@@ -22,14 +22,16 @@
 What would you like to do today? <br />
 				<h:commandButton value="Archive" action="archive" />
 				<h:commandButton value="Payment History" action="paymenthistory" />
-				<h:commandButton value="Log Out" action="start-page" />
+				<h:commandButton value="Log Out" action="#{userManager.logout}" />
+				<h:commandButton value="Add Friend" action="addnewfriend" />
+				
 			</h:form>
 		</fieldset>
 
 		<fieldset>
 			<h:form>
 				<legend>Bill Options</legend>
-				<h:commandButton value="Add Bill" action="addbill" />
+				<h:commandButton value="Add Bill" action="#{userManager.addBill}" />
 				<br />
 				<legend>Enter Bill_ID that you want to pay off</legend>
 				<h:commandButton value="Pay" action="#{userManager.bm.payBill}" />
@@ -38,8 +40,8 @@ What would you like to do today? <br />
 		</fieldset>
 	</div>
 
+<div align="center">
 	Bills
-
 	<h:form>
 		<h:dataTable border="1" value="#{userManager.bm.bList}" var="item">
 			<h:column>
@@ -60,7 +62,7 @@ What would you like to do today? <br />
 		</h:dataTable>
 	</h:form>
 
-
+</div>
 	<!-- This means bean named "yourBean" must have method named "getYourProperty" -->
 	<!--  #{yourBean.yourProperty} -->
 

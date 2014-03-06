@@ -1,10 +1,14 @@
 package splitPackage;
 
 import javax.faces.bean.*;
+import javax.faces.model.SelectItem;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.io.Serializable;
+
 import splitPackageJDBC.JDBCSQLiteConnection;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,18 +23,20 @@ import java.sql.Statement;
  * 
  */
 @ManagedBean
-public class BillManager implements Serializable {
+public class BillManager extends ApplicationManager implements Serializable {
 	private User currentUser;
 	private Bill currentBill;
 	private List<Bill> bList;
 	private String statusMessage;
-	private String recipientList;
 	private String removeID;
-
+	private String recipientName;
+	private List<User> recipientList;
+	
 	// Constructors
 	public BillManager() {
 		currentBill = new Bill();
 		bList = new ArrayList<Bill>();
+		recipientList = new ArrayList<User>();
 	}
 
 	public BillManager(User u) {
@@ -62,12 +68,16 @@ public class BillManager implements Serializable {
 		this.statusMessage = statusMessage;
 	}
 
-	public String getRecipientList() {
-		return recipientList;
+	public String getRecipientName() {
+		return recipientName;
+	}
+	public void setRecipientName(String name) {
+		recipientName = name;
 	}
 
-	public void setRecipientList(String recipientList) {
-		this.recipientList = recipientList;
+
+	public void setRecipientList(String recipientName) {
+		this.recipientName = recipientName;
 	}
 
 	public String getRemoveID() {
@@ -81,7 +91,12 @@ public class BillManager implements Serializable {
 	public void setbList(List<Bill> bList) {
 		this.bList = bList;
 	}
-
+	public List<User> getRecipientList() {
+		return this.recipientList;
+	}
+	public void setRecipientList(List<User> reps) {
+		this.recipientList = reps;
+	}	
 	// Methods
 	/**
 	 * Creates a bill.
@@ -108,43 +123,12 @@ public class BillManager implements Serializable {
 				}
 			}
 			// Checks for correct input format
-			if (currentBill.getBill_name().trim().length() == 0
-					|| currentBill.getBill_name().trim().length() != currentBill
-							.getBill_name().length()) {
+			if (checkValidInput(currentBill.getBill_name())) {
 				statusMessage = "Invalid Bill Name";
 				return "addbill";
 			}
-			// Checks if spaces or new lines were inserted before the recipients
-			String[] preList = recipientList.split("\\s+");
-			ArrayList<String> list = new ArrayList<String>();
-			if (preList[0].equals("")) {
-				for (int i = 1; i < preList.length; ++i) {
-					list.add(preList[i]);
-				}
-			} else {
-				for (int i = 0; i < preList.length; ++i) {
-					list.add(preList[i]);
-				}
-			}
-			// Checks if any recipients repeat
-			if (duplicates(list) == true) {
-				statusMessage = "error: duplicate entry!";
-				return "addbill";
-			}
-			// Checks if recipients exists
-			for (String i : list) {
-				query = "SELECT * FROM user WHERE user_name='" + i + "'";
-				rs = statement.executeQuery(query);
-				if (!rs.next()) {
-					statusMessage = i + " does not exist!";
-					statement.close();
-					connection.close();
-					return "addbill";
-				}
-			}
-			currentBill.setNumRecipients(list.size());
 			// Splits the bill
-			currentBill.setCost(split(currentBill.getNumRecipients(),
+			currentBill.setCost(split(recipientList.size(),
 					currentBill.getTotal()));
 			// Inserts a bill into table bill with values
 			// bill_id, bill_name, sender_id, recipient_id, cost, total, status,
@@ -153,23 +137,22 @@ public class BillManager implements Serializable {
 					+ currentBill.getBill_name() + "'," + currentUser.getID()
 					+ "," + "null," + currentBill.getCost() + ","
 					+ currentBill.getTotal() + ",'Owed'," + "null," + "null,"
-					+ currentBill.getNumRecipients() + ")";
+					+ recipientList.size() + ")";
 			statement.executeUpdate(query);
+			
 			query = "SELECT * FROM BILL WHERE bill_name='"
 					+ currentBill.getBill_name() + "'";
 			rs = statement.executeQuery(query);
 			currentBill.setBill_ID(rs.getInt("bill_id"));
+			
 			// Inserts a bill_recipient for each recipient
-			for (String recipient : list) {
-				int recipientID;
-				query = "SELECT * FROM USER WHERE user_name='" + recipient
-						+ "'";
-				rs = statement.executeQuery(query);
-				recipientID = rs.getInt("user_id");
+			for (User recipient : recipientList) {
+				int recipientID = recipient.getID();
 				query = "INSERT INTO bill_recipient VALUES("
 						+ currentBill.getBill_ID() + "," + recipientID + ")";
 				statement.executeUpdate(query);
 			}
+			
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -184,6 +167,7 @@ public class BillManager implements Serializable {
 			}
 		}
 		statusMessage = "Success!";
+		currentBill = new Bill();
 		return "addbill";
 	}
 
@@ -224,7 +208,7 @@ public class BillManager implements Serializable {
 					bill.setCost(rs2.getDouble("cost"));
 					bill.setTotal(rs2.getDouble("total"));
 					bill.setStatus(rs2.getString("status"));
-					bill.setNumRecipients(rs2.getInt("num_recipients"));
+				//	bill.setNumRecipients(rs2.getInt("num_recipients"));
 					bList.add(bill);
 				}
 
@@ -258,7 +242,7 @@ public class BillManager implements Serializable {
 			// check for duplicate bill
 			String query = "DELETE FROM bill_recipient WHERE bill_id="
 					+ removeID + " AND recipient_id=" + currentUser.getID();
-			statement.executeQuery(query);
+			statement.executeUpdate(query);
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -276,8 +260,51 @@ public class BillManager implements Serializable {
 		// statusMessage = "Successfully Paid!";
 		return "front-page";
 	}
+	
+	public String addRecipient() {
+		ResultSet rs = null;
+		try {
+			rs = searchForUser(recipientName);
+			if (rs.next()) {
+				User temp = new User();
+				temp.setUser(rs.getString("user_name"));
+				temp.setID(rs.getInt("user_id"));
+				temp.setPw(rs.getString("password"));
+				temp.setFirst(rs.getString("first"));
+				temp.setLast(rs.getString("last"));
+				temp.setEmail(rs.getString("email"));
+				//check to see if user is already a recipient
+				if(! duplicates(temp)) {
+					recipientList.add(temp);
+				} else {
+					statusMessage = "User " + temp.getUser() + " is already a recipient.";
+					return "addbill";
+				} 
+				rs.close();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace(); 
+		}finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return "addbill";
+	}
 
 	// Helper Function
+	private boolean duplicates(User user) {
+		for (int j = 0; j < recipientList.size(); j++) {
+				if (recipientList.get(j).getUser().equals(user.getUser()) )
+					return true;
+		}
+		return false;
+	}
+	
 	private boolean duplicates(ArrayList<String> list) {
 		for (int j = 0; j < list.size(); j++) {
 			for (int k = j + 1; k < list.size(); k++) {

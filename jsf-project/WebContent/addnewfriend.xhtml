@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html">
+<h:head>
+	<title>addnewfriend</title>
+	<link href="./css/styles.css" rel="stylesheet" type="text/css" />
+	<!--  Assumes you have styles.css in WebContent/css/ -->
+</h:head>
+<h:body>
+	<h1 class="title">Add a new friend</h1>
+	<br />
+	<!-- Other HTML tags and non-input JSF elements here -->
+	<div align="center">
+
+		<h:form>
+			<legend>Search for a user to add as a friend</legend>
+			<br />
+				User Name: <h:inputText value="#{userManager.friendUserName}" />
+
+			<h:commandButton value="Submit" action="#{userManager.addFriend}" />
+			<h:commandButton value="Back" action="front-page" />
+			<br />
+			<h:outputLabel value="#{userManager.statusMessage}" />
+		</h:form>
+	</div>
+	<!-- This means bean named "yourBean" must have method named "getYourProperty" -->
+	<!--  #{yourBean.yourProperty} -->
+
+	<!-- Other HTML tags and non-input JSF elements here -->
+</h:body>
+</html>

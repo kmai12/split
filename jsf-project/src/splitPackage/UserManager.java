@@ -1,6 +1,7 @@
 package splitPackage;
 
 import javax.faces.bean.*;
+import javax.faces.model.SelectItem;
 
 import splitPackageJDBC.JDBCSQLiteConnection;
 
@@ -8,6 +9,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.io.Serializable;
 
 /**
@@ -18,18 +21,23 @@ import java.io.Serializable;
  */
 @ManagedBean
 @SessionScoped
-public class UserManager implements Serializable {
+public class UserManager extends ApplicationManager implements Serializable {
 	private User currentUser; // Current user logged in
 	private BillManager bm;
 	private String statusMessage; // message that can be displayed on webpages
 									// i.e "Invalid Password!"
+	private String friendUserName;
+	private String recipientName;
+	private ArrayList<SelectItem> currentUserFriends; 
 
+	
 	/**
 	 * Default no-arg constructor. Set the current User to a new default User.
 	 */
 	public UserManager() {
 		currentUser = new User();
 		bm = new BillManager();
+		currentUserFriends = new ArrayList<SelectItem>();
 	}
 
 	/**
@@ -99,6 +107,13 @@ public class UserManager implements Serializable {
 		this.bm = bm;
 	}
 
+	public String getFriendUserName() {
+		return this.friendUserName;
+	}
+	public void setFriendUserName(String uname) {
+		friendUserName = uname;
+	}
+	
 	// Methods for Registration/Login
 	/**
 	 * This method is used to register a new user.
@@ -107,30 +122,8 @@ public class UserManager implements Serializable {
 	 *         page or the registration page.
 	 */
 	public String registerUser() {
-		Connection connection = null;
-		ResultSet rs = null;
-		Statement statement = null;
-		// query is a SQL statement used to insert elements into user
-		String query = "INSERT into user(user_id,user_name,password,first,last,email) "
-				+ "values(null,'"
-				+ currentUser.getUser()
-				+ "','"
-				+ currentUser.getPw()
-				+ "','"
-				+ currentUser.getFirst()
-				+ "','"
-				+ currentUser.getLast()
-				+ "','"
-				+ currentUser.getEmail()
-				+ "');";
-
 		try {
-			connection = JDBCSQLiteConnection.getConnection();
-			statement = connection.createStatement();
-			// check for duplicate user
-			String checkDuplicateUser = "SELECT * FROM user WHERE user_name='"
-					+ currentUser.getUser().toLowerCase() + "'";
-			rs = statement.executeQuery(checkDuplicateUser);
+			ResultSet rs = searchForUser(currentUser.getUser().toLowerCase());
 			if (rs.next()) {
 				if ((currentUser.getUser().toLowerCase()).equals(rs.getString(
 						"user_name").toLowerCase())) {
@@ -163,35 +156,14 @@ public class UserManager implements Serializable {
 				return "register";
 			} // end check for empty fields and/or leading/trailing white spaces
 
-			statement.executeUpdate(query);
+			insertIntoTable("user",currentUser);
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} finally {
-			if (connection != null) {
-				try {
-					statement.close();
-					connection.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
-		}
+		} 
+		statusMessage=null;
 		return "start-page";
 	}
 	
-	/**
-	 * Helper function to check if user input is valid
-	 * @param str The user input.
-	 * @return
-	 */
-	public boolean checkValidInput(String str) {
-		boolean valid = false;
-		if (str.trim().length() == 0
-				|| str.trim().length() != str.length()) {
-			valid = true;
-		}
-		return valid;
-	}
 
 	/**
 	 * This method is used to login the a user.
@@ -200,17 +172,9 @@ public class UserManager implements Serializable {
 	 *         page or the login page.
 	 */
 	public String login() {
-
-		Connection connection = null;
 		ResultSet rs = null;
-		Statement statement = null;
-		String usernameInput = currentUser.getUser();
-		String query = "SELECT * FROM user WHERE user_name='" + usernameInput
-				+ "'";
 		try {
-			connection = JDBCSQLiteConnection.getConnection();
-			statement = connection.createStatement();
-			rs = statement.executeQuery(query);
+			rs = searchForUser(currentUser.getUser());
 			if (rs.next()) {
 				currentUser.setUser(rs.getString("user_name"));
 				currentUser.setID(rs.getInt("user_id"));
@@ -222,16 +186,17 @@ public class UserManager implements Serializable {
 				currentUser.setFirst(rs.getString("first"));
 				currentUser.setLast(rs.getString("last"));
 				currentUser.setEmail(rs.getString("email"));
+				rs.close();
 			} else {
-				statusMessage = "Username " + usernameInput + " not found!";
+				statusMessage = "Username " + currentUser.getUser() + " not found!";
 				return "start-page";
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			if (connection != null) {
+			e.printStackTrace(); 
+		}finally {
+			if (rs != null) {
 				try {
-					connection.close();
+					rs.close();
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
@@ -240,8 +205,177 @@ public class UserManager implements Serializable {
 		// Sets BillManager's currentUser to the current user
 		User temp = new User(currentUser);
 		bm.setCurrentUser(temp);
+		statusMessage = null;
+		return "front-page";
+	}
+	
+	public String logout() {
+		currentUser = new User();
+		bm = new BillManager();
+		statusMessage = ""; 
+		friendUserName = "";
+		recipientName = "";
+		currentUserFriends = new ArrayList<SelectItem>();
+		return "start-page";
+	}	
+	
+	/**
+	 * This method is used to help the user add a new friend.
+	 * @return a string that directs you to the proper page
+	 */
+	
+	public String addFriend() {
+		ResultSet rs = null;
+		ResultSet myFriends = null;
+		//check to see if user left the field blank
+		if(checkValidInput(friendUserName)) {
+			statusMessage = "Please enter a username.";
+		}
+		
+		//check to see if user exist
+		try {
+			rs = searchForUser(friendUserName);
+			if(rs.next()) {
+				User friend = new User();
+				friend.setUser(rs.getString("user_name"));
+				friend.setID(rs.getInt("user_id"));
+				rs.close();
+				//check to see if already friends
+				myFriends = searchForFriendship(currentUser.getID(),friendUserName);
+				if(myFriends != null) {
+					if(myFriends.next()) {
+						statusMessage = "You are already friends with " + friendUserName + ".";
+						return "addnewfriend";
+					}
+				}
+				myFriends.close();
+				//if all pass all checks, add friend.
+				insertIntoTable("friends",friend);
+			} else {
+				statusMessage = "User " + friendUserName + " does not exist.";
+				return "addnewfriend";
+			}
+		} catch(SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+					myFriends.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		//check to see if already friends with this user
+		//if pass all checks add friends
+		statusMessage = null;
+		return "front-page";
+	
+	}
+	public String addBill() {
+		findCurrentUserFriends();
+		return "addbill";
+	}
+	
+	/**
+	 * Function that returns a list of the current user's friends
+	 */
+	public List<SelectItem> getCurrentUserFriends() {
+		return currentUserFriends;
+	}
+	
+	public List<SelectItem> findCurrentUserFriends() {
 
+		ResultSet rs = null;
+		try {
+			rs = searchForFriends(currentUser.getID());
+			while (rs.next()) {
+				String s = rs.getString("friend_uname");
+				currentUserFriends.add(new SelectItem(s));
+			}
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		} finally {
+			try {
+				rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return currentUserFriends;
+	}
+	public String addBillGoBack() {
+		this.currentUserFriends = new ArrayList<SelectItem>();
+		bm.setRecipientList(new ArrayList<User>());
+		bm.getCurrentBill().setBill_name("");
+		bm.getCurrentBill().setTotal(0);
+		bm.setStatusMessage("");
+		
 		return "front-page";
 	}
 
+	// HELPER FUNCTIONS
+	/**
+	 * This method is a helper method that inserts information to data tables in the database
+	 * @param tableName the name of the table that you would like to add information to
+	 * @param user the user that holds the information you would like to add to the database
+	 */
+	
+	public void insertIntoTable(String tableName, User user) {
+		Connection connection = null;
+		Statement statement = null;
+		String query = "";
+		
+		try {
+			connection = JDBCSQLiteConnection.getConnection();
+			statement = connection.createStatement();
+			
+			switch (tableName) {
+				case "user" :
+					query = "INSERT into user(user_id,user_name,password,first,last,email) "
+							+ "values(null,'"
+							+ user.getUser()
+							+ "','"
+							+ user.getPw()
+							+ "','"
+							+ user.getFirst()
+							+ "','"
+							+ user.getLast()
+							+ "','"
+							+ user.getEmail()
+							+ "');";
+					statement.executeUpdate(query);
+					break;
+				case "friends" :
+					query = "INSERT INTO friends(user_id, friend_id, friend_uname) " 
+							+ "values("
+							+ currentUser.getID()
+							+ ","
+							+ user.getID()
+							+ ",'"
+							+ user.getUser()
+							+ "');";
+					statement.executeUpdate(query);
+					break;
+				default:
+					System.out.println("table not found");
+				
+			}
+		} catch(SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if (connection != null) {
+				try {
+					statement.close();
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		
+	} 
 }

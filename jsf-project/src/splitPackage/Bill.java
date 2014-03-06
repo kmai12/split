@@ -24,7 +24,7 @@ public class Bill implements Serializable {
 		this.date = date;
 		this.status = status;
 		this.comment = comment;
-		this.numRecipients = numRecipients;
+		//this.numRecipients = numRecipients;
 	}
 
 	// Attributes
@@ -37,7 +37,7 @@ public class Bill implements Serializable {
 	private String date;
 	private String status;
 	private String comment;
-	private int numRecipients;
+	//private int numRecipients;
 
 	// Getters and Setters
 	public int getBill_ID() {
@@ -111,7 +111,7 @@ public class Bill implements Serializable {
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
-
+/*
 	public int getNumRecipients() {
 		return this.numRecipients;
 	}
@@ -119,5 +119,8 @@ public class Bill implements Serializable {
 	public void setNumRecipients(int r) {
 		this.numRecipients = r;
 	};
-
+*/
+	public String toString() {
+		return this.bill_name + " " + this.cost;
+	}
 }
