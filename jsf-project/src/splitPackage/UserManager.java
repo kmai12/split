@@ -230,6 +230,7 @@ public class UserManager extends ApplicationManager implements Serializable {
 		//check to see if user left the field blank
 		if(checkValidInput(friendUserName)) {
 			statusMessage = "Please enter a username.";
+			return "addnewfriend";
 		}
 		
 		//check to see if user exist

@@ -127,6 +127,12 @@ public class BillManager extends ApplicationManager implements Serializable {
 				statusMessage = "Invalid Bill Name";
 				return "addbill";
 			}
+			// Checks for non-empty recipient list
+			if(recipientList.size() == 0){
+				statusMessage = "Error: no recipients listed!";
+				return "addbill";
+			}
+			
 			// Splits the bill
 			currentBill.setCost(split(recipientList.size(),
 					currentBill.getTotal()));
@@ -243,7 +249,7 @@ public class BillManager extends ApplicationManager implements Serializable {
 			String query = "DELETE FROM bill_recipient WHERE bill_id="
 					+ removeID + " AND recipient_id=" + currentUser.getID();
 			statement.executeUpdate(query);
-
+			checkBills();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -296,6 +302,41 @@ public class BillManager extends ApplicationManager implements Serializable {
 		return "addbill";
 	}
 
+	public Boolean checkBills(){
+		Boolean billAllPaid = false;
+		Connection connection = null;
+		Statement statement = null;
+		ResultSet rs = null;
+		try {
+			connection = JDBCSQLiteConnection.getConnection();
+			statement = connection.createStatement();
+			// check for duplicate bill
+			String query = "SELECT * FROM bill_recipient WHERE bill_id="
+							+removeID;
+			rs = statement.executeQuery(query);
+			if(!rs.next()){
+				Statement statement2 = connection.createStatement();
+				String query2 = "DELETE FROM bill WHERE bill_id="
+						+ removeID;
+				statement2.executeUpdate(query2);
+				billAllPaid = true;	
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if (connection != null) {
+				try {
+					statement.close();
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+
+			}
+		}
+		return billAllPaid;
+	}
+	
 	// Helper Function
 	private boolean duplicates(User user) {
 		for (int j = 0; j < recipientList.size(); j++) {
@@ -305,15 +346,7 @@ public class BillManager extends ApplicationManager implements Serializable {
 		return false;
 	}
 	
-	private boolean duplicates(ArrayList<String> list) {
-		for (int j = 0; j < list.size(); j++) {
-			for (int k = j + 1; k < list.size(); k++) {
-				if (k != j && list.get(k).equals(list.get(j)))
-					return true;
-			}
-		}
-		return false;
-	}
+
 
 	private double split(int recipientAmount, double total) {
 		double cost = total / recipientAmount;
