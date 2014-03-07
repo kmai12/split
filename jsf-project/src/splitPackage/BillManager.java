@@ -1,14 +1,12 @@
 package splitPackage;
 
 import javax.faces.bean.*;
-import javax.faces.model.SelectItem;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.io.Serializable;
 
 import splitPackageJDBC.JDBCSQLiteConnection;
-
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,17 +14,13 @@ import java.sql.Statement;
 
 /**
  * Class that manages bill actions
- *
- */
-/**
- * @author Kevin
- * 
  */
 @ManagedBean
 public class BillManager extends ApplicationManager implements Serializable {
 	private User currentUser;
 	private Bill currentBill;
 	private List<Bill> bList;
+	private List<Bill> bOwedList;
 	private String statusMessage;
 	private String removeID;
 	private String recipientName;
@@ -36,6 +30,7 @@ public class BillManager extends ApplicationManager implements Serializable {
 	public BillManager() {
 		currentBill = new Bill();
 		bList = new ArrayList<Bill>();
+		bOwedList = new ArrayList<Bill>();
 		recipientList = new ArrayList<User>();
 	}
 
@@ -90,6 +85,9 @@ public class BillManager extends ApplicationManager implements Serializable {
 
 	public void setbList(List<Bill> bList) {
 		this.bList = bList;
+	}
+	public void setbOwedList(List<Bill> bOwedList){
+		this.bOwedList = bOwedList;
 	}
 	public List<User> getRecipientList() {
 		return this.recipientList;
@@ -235,6 +233,59 @@ public class BillManager extends ApplicationManager implements Serializable {
 	}
 
 	/**
+	 * Generates bOwedList
+	 * @return List<Bill>
+	 */
+	public List<Bill> getbOwedList() {
+		List<Bill> bOwedList = new ArrayList<Bill>();
+		Connection connection = null;
+		ResultSet rs = null;
+		ResultSet rs2 = null;
+		Statement statement = null;
+		Statement statement2 = null;
+		try {
+			connection = JDBCSQLiteConnection.getConnection();
+			// YOU NEED 2 SEPARATE STATEMENTS FOR 2 CONCURRING QUERY
+			// EXECUTIONS!!
+			statement = connection.createStatement();
+			statement2 = connection.createStatement();
+			String query = "SELECT * FROM bill WHERE sender_id="
+					+ currentUser.getID();
+
+			rs = statement.executeQuery(query);
+			while (rs.next()) {
+				String query2 = "SELECT * FROM bill_recipient WHERE bill_id="
+						+ rs.getInt("bill_id");
+				rs2 = statement2.executeQuery(query2);
+				while (rs2.next()) {
+					Bill bill = new Bill();
+					bill.setBill_ID(rs2.getInt("bill_id"));
+					bill.setBill_name(rs.getString("bill_name"));
+					bill.setRecipient_ID(rs2.getInt("recipient_id"));
+					bill.setCost(rs.getDouble("cost"));
+					bill.setSender_ID(rs.getInt("sender_id"));
+					bill.setTotal(rs.getDouble("total"));
+					bOwedList.add(bill);
+				}
+
+			}
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		} finally {
+			if (connection != null) {
+				try {
+					statement.close();
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return bOwedList;
+	}
+
+	
+	/**
 	 * Removes selected bill in the database from the user.
 	 * 
 	 * @return name of html page to direct to.
@@ -343,6 +394,7 @@ public class BillManager extends ApplicationManager implements Serializable {
 		}
 		return billAllPaid;
 	}
+	
 	
 	// Helper Function
 	private boolean duplicates(User user) {

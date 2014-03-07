@@ -27,7 +27,6 @@ public class UserManager extends ApplicationManager implements Serializable {
 	private String statusMessage; // message that can be displayed on webpages
 									// i.e "Invalid Password!"
 	private String friendUserName;
-	private String recipientName;
 	private ArrayList<SelectItem> currentUserFriends; 
 
 	
@@ -214,7 +213,6 @@ public class UserManager extends ApplicationManager implements Serializable {
 		bm = new BillManager();
 		statusMessage = ""; 
 		friendUserName = "";
-		recipientName = "";
 		currentUserFriends = new ArrayList<SelectItem>();
 		return "start-page";
 	}	

@@ -1,6 +1,15 @@
 package splitPackage;
 
 import javax.faces.bean.*;
+
+import java.io.Serializable;
+
+import splitPackageJDBC.JDBCSQLiteConnection;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.io.Serializable;
 
 /**
@@ -37,7 +46,6 @@ public class Bill implements Serializable {
 	private String date;
 	private String status;
 	private String comment;
-	//private int numRecipients;
 
 	// Getters and Setters
 	public int getBill_ID() {
@@ -111,15 +119,66 @@ public class Bill implements Serializable {
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
-/*
-	public int getNumRecipients() {
-		return this.numRecipients;
+	
+	public String getRecipientName() {
+		String userName = "N/A";
+		Connection connection = null;
+		Statement statement = null;
+		ResultSet rs = null;
+		try {
+			connection = JDBCSQLiteConnection.getConnection();
+			statement = connection.createStatement();
+			String query = "SELECT * FROM user WHERE user_id=" + recipient_id;
+			rs = statement.executeQuery(query);
+			while (rs.next()) {
+				userName = rs.getString("user_name");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if (connection != null) {
+				try {
+					statement.close();
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+
+			}
+		}
+		return userName;
 	}
 
-	public void setNumRecipients(int r) {
-		this.numRecipients = r;
-	};
-*/
+	public String getSenderName() {
+		String userName = "N/A";
+		Connection connection = null;
+		Statement statement = null;
+		ResultSet rs = null;
+		try {
+			connection = JDBCSQLiteConnection.getConnection();
+			statement = connection.createStatement();
+			String query = "SELECT * FROM user WHERE user_id=" + sender_id;
+			rs = statement.executeQuery(query);
+			while (rs.next()) {
+				userName = rs.getString("user_name");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if (connection != null) {
+				try {
+					statement.close();
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+
+			}
+		}
+		return userName;
+	}
+
+	
 	public String toString() {
 		return this.bill_name + " " + this.cost;
 	}
