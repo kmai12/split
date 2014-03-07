@@ -262,7 +262,8 @@ public class UserManager extends ApplicationManager implements Serializable {
 			if (rs != null) {
 				try {
 					rs.close();
-					myFriends.close();
+					if(myFriends != null)
+						myFriends.close();
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}

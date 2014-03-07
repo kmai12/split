@@ -268,9 +268,16 @@ public class BillManager extends ApplicationManager implements Serializable {
 	}
 	
 	public String addRecipient() {
+		Connection connection = null;
+		Statement statement = null;
 		ResultSet rs = null;
+		String query;
 		try {
-			rs = searchForUser(recipientName);
+			connection = JDBCSQLiteConnection.getConnection();
+			statement = connection.createStatement();
+			query = "SELECT * FROM user WHERE user_name='" + recipientName
+					+ "'";
+			rs = statement.executeQuery(query);
 			if (rs.next()) {
 				User temp = new User();
 				temp.setUser(rs.getString("user_name"));
@@ -286,7 +293,7 @@ public class BillManager extends ApplicationManager implements Serializable {
 					statusMessage = "User " + temp.getUser() + " is already a recipient.";
 					return "addbill";
 				} 
-				rs.close();
+				//rs.close();
 			}
 		} catch (SQLException e) {
 			e.printStackTrace(); 
