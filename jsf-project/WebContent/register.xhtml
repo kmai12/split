@@ -12,7 +12,7 @@
 <!-- Other HTML tags and non-input JSF elements here -->
 <div align="center" >
 <fieldset>
-<legend>Register</legend>
+<legend align="center">Register</legend>
 <h:form>
 <br/>
 <h:outputLabel value="Username:   " style="font-weight:bold" />
@@ -25,8 +25,10 @@
 <h:inputText value="#{userManager.currentUser.last}"/><br/>
 <h:outputLabel value="Email:  	  " style="font-weight:bold" />
 <h:inputText value="#{userManager.currentUser.email}"/><br/>
+<br />
 <h:commandButton value="Submit" action="#{userManager.registerUser}"/>
-<h:commandButton value="Go back" action="front-page"/>
+<b>   </b>
+<h:commandButton value="Back" action="#{userManager.registerGoBack}"/>
 <br/>
 <h:outputLabel value="#{userManager.statusMessage}"/>
 </h:form>

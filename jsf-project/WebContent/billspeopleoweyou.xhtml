@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+	<title>Bills that people owe you</title>
+	
+	<link href="./css/styles.css" rel="stylesheet" type="text/css" />
+	<!--  Assumes you have styles.css in WebContent/css/ -->
+</h:head>
+<body>
+	<h1 class="title">Bills That People Owe You</h1>
+	<div align="center">
+		<h:form>
+		<br />
+			<h:dataTable border="1" value="#{userManager.bm.owedToYouList}"
+				var="item">
+				<h:column>
+					<f:facet name="header">Bill_ID</f:facet>
+			#{item.getBill_ID()}
+			</h:column>
+				<h:column>
+					<f:facet name="header">Bill Name</f:facet>
+			#{item.getBill_name()}
+			</h:column>
+				<h:column>
+					<f:facet name="header">User</f:facet>
+			#{item.getRecipientName()}</h:column>
+				<h:column>
+					<f:facet name="header">Cost</f:facet>
+			#{item.getCost()}
+			</h:column>
+			</h:dataTable>
+			<br />
+			<h:commandButton value="Back" action="front-page" />
+				
+		</h:form>
+
+	</div>
+</body>
+</html>

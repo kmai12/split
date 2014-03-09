@@ -10,82 +10,41 @@
 </h:head>
 
 <h:body>
-	<h1 class="title">Welcome to Split It</h1>
+	<h1 class="title">SPL/IT</h1>
 	<br />
 	<!-- Other HTML tags and non-input JSF elements here -->
 	<div align="center">
-
+		<h:form>
 		<fieldset>
-			<legend>Welcome #{userManager.currentUser.user}</legend>
-			<h:form>
-				<br/>
-What would you like to do today? 
-	<br/>
+			<legend align="center"> Welcome
+				#{userManager.currentUser.first}</legend>
 				<h:commandButton value="Log Out" action="#{userManager.logout}" />
+				<br />
+				<b>What would you like to do today?</b> 
+				<br />
 				<h:commandButton value="Add Friend" action="addnewfriend" />
-			</h:form>
+				<b>   </b>
+				<h:commandButton value="Add Bill" action="#{userManager.addBill}" />
 		</fieldset>
 
 		<fieldset>
-			<h:form>
-				<legend>Bill Options</legend>
-				<h:commandButton value="Add Bill" action="#{userManager.addBill}" />
+			
+				<legend align="center">Bill Options</legend>
+				Currently you owe: 
+				<h:outputText value="#{userManager.bm.totalPay}"
+					style="font-weight:bold" />
+				<b> </b>
+				<h:commandButton value="View Details" action="billsyouowe" />
 				<br />
-				<legend>Enter Bill_ID that you want to pay off</legend>
-				<h:commandButton value="Pay" action="#{userManager.bm.payBill}" />
-				<h:inputText value="#{userManager.bm.removeID}" />
-			</h:form>
+				Currently people owe you: 
+				<h:outputText value="#{userManager.bm.totalReceive}"
+					style="font-weight:bold" />
+				<b> </b>
+				<h:commandButton value="View Details" action="billspeopleoweyou" />
+			
 		</fieldset>
-	</div>
-
-	<div align="center">
-		<b>Bills You Owe</b>
-		<h:form>
-			<h:dataTable border="1" value="#{userManager.bm.bList}" var="item">
-				<h:column>
-					<f:facet name="header">Bill_ID</f:facet>
-			#{item.getBill_ID()}
-			</h:column>
-				<h:column>
-					<f:facet name="header">Bill Name</f:facet>
-			#{item.getBill_name()}
-			</h:column>
-				<h:column>
-					<f:facet name="header">Owed To</f:facet>
-			#{item.getSenderName()}</h:column>
-				<h:column>
-					<f:facet name="header">Cost</f:facet>
-			#{item.getCost()}
-			</h:column>
-			</h:dataTable>
 		</h:form>
-
 	</div>
-
-	<div align="center">
-		<b>Bills People Owe You</b>
-		<h:form>
-			<h:dataTable border="1" value="#{userManager.bm.bOwedList}" var="item">
-				<h:column>
-					<f:facet name="header">Bill_ID</f:facet>
-			#{item.getBill_ID()}
-			</h:column>
-				<h:column>
-					<f:facet name="header">Bill Name</f:facet>
-			#{item.getBill_name()}
-			</h:column>
-				<h:column>
-					<f:facet name="header">User</f:facet>
-			#{item.getRecipientName()}</h:column>
-				<h:column>
-					<f:facet name="header">Cost</f:facet>
-			#{item.getCost()}
-			</h:column>
-			</h:dataTable>
-		</h:form>
-
-	</div>
-	
 
 </h:body>
 </html>

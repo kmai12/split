@@ -8,13 +8,14 @@
 	<!--  Assumes you have styles.css in WebContent/css/ -->
 </h:head>
 <h:body>
+
+	<h1 class="title">WELCOME TO SPL/IT!</h1>
 <div align="center">
-	<h1 class="title">Welcome to Split</h1>
 	<br />
 	<!-- Other HTML tags and non-input JSF elements here -->
 
 		<fieldset>
-			<legend>Login</legend>
+			<legend align="center"> Login </legend>
 			<h:form>
 				<br />
 				<h:outputLabel value="Username: " style="font-weight:bold" />
@@ -23,8 +24,11 @@
 				<h:outputLabel value="Password: " style="font-weight:bold" />
 				<h:inputSecret type="password" value="#{userManager.currentUser.pw}" />
 				<br />
+				<br />
 				<h:commandButton value="Go" action="#{userManager.login}" />
+				<b>   </b>
 				<h:commandButton value="Register" action="register" />
+				<b>   </b>
 				<h:commandButton value="Forgot PW?" />
 				<br />
 				<h:outputLabel value="#{userManager.statusMessage}" />

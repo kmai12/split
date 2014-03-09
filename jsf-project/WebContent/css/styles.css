@@ -1,60 +1,82 @@
 body {
-  background-color: #e9e9e9; 
+	background-image: url('bg1.jpg');
+	background-position:center top;
+	 background-size:100%;
 }
-a:hover { 
-  color: red
+
+
+a:hover {
+	color: red
 }
+
 h1,h2,h3 {
-  text-align: center;
-  font-family: Verdana, Arial, Helvetica, sans-serif;
-  color: black;
+	text-align: center;
+	font-family: Georgia, serif;
+	color: black;
 }
+
 h1.title {
-  display: table;
-  margin: auto;
-  background-color: #afc4d6;
-  border-width: 4px;
-  border-style: outset;
-  border-color: #9fd1ff;
-  padding: 5px 8px;
-  letter-spacing: -.025em;
-} /* If prompt and input are in two cells of one row, the prompt will be R-aligned. */
+	display: table;
+	margin: auto;
+	background-color: #89ec1f;
+	border-width: 4px;
+	border-style: outset;
+	border-color: #58bb00;
+	padding: 5px 8px;
+	letter-spacing: -.025em;
+}
+	/* If prompt and input are in two cells of one row, the prompt will be R-aligned. */
 .formTable {
-  display: table;
+	display: table;
 }
+
 .formTable td:first-child {
-  text-align: right;
+	text-align: right;
 }
-th { background-color: #afc4d6;
-     font-size: 110%;
-     font-family: Arial, Helvetica, sans-serif;
+
+th {
+	background-color: #56bb01;
+	font-size: 110%;
+	font-family: Georgia, serif;
 }
+
 legend {
-  font-weight: bold;
-  color: black;
-  background-color: #afc4d6;
-  border: 1px solid #1a55bf;
-  padding: 3px 5px;
+	font-family: Georgia, serif;
+	font-size: 18px;
+	text-align: center;
+	font-weight: bold;
+	color: black;
+	background-color: #56bb01;
+	border: 1px solid #000000;
+	padding: 3px 5px;
 }
-input, textarea {
-  background-color: #ecedf2;
-  text-align: left;
+
+input,textarea {
+	background-color: #cee7ad;
+	text-align: left;
 }
+
 input[type="checkbox"] {
-  background-color: transparent;  /* For IE -- doesn't matter in FF or Chrome */
+	background-color: transparent;
+	/* For IE -- doesn't matter in FF or Chrome */
 }
-input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
-  background-color: #9fd1ff;
+
+input[type="text"]:focus,input[type="password"]:focus,textarea:focus {
+	background-color: #a2f600;
 }
+
 .error {
-  color: red;
-  font-weight: bold;
+	color: red;
+	font-weight: bold;
 }
+
 .blue-error {
-  color: blue;
-  font-weight: bold;
+	color: blue;
+	font-weight: bold;
 }
-ul.aligned {  /* So if in centered div, the bullets line up under each other */
-  display: inline-block;
-  text-align: left; 
+
+ul.aligned {
+	/* So if in centered div, the bullets line up under each other */
+	display: inline-block;
+	text-align: left;
 }

@@ -7,28 +7,7 @@ import java.sql.Statement;
 
 import splitPackageJDBC.JDBCSQLiteConnection;
 
-public class ApplicationManager {
-	/**
-	 * Helper method to search for user in a database
-	 * @param usernameInput the the username you would like to search for 
-	 * @return resultSet containing your search result
-	 * @throws SQLException
-	 */
-	public ResultSet searchForUser(String usernameInput) throws SQLException {
-		Connection connection = null;
-		ResultSet rs = null;
-		Statement statement = null;
-		String query = "SELECT * FROM user WHERE user_name='" + usernameInput
-				+ "'";
-		try {
-			connection = JDBCSQLiteConnection.getConnection();
-			statement = connection.createStatement();
-			rs = statement.executeQuery(query);
-		} catch (SQLException e){
-			e.printStackTrace();
-		} 
-		return rs;
-	}
+public abstract class ApplicationManager {
 	/**
 	 * Helper function to check if user input is valid
 	 * @param str The user input.
@@ -64,17 +43,12 @@ public class ApplicationManager {
 		return rs;		
 	}
 	
-	/**
-	 * Helper method to search for user in a database
-	 * @param user_id the id of the user you are trying to search for 
-	 * @return resultSet containing your search result
-	 * @throws SQLException
-	 */
-	public ResultSet searchForFriends(int user_id) throws SQLException {
+	public ResultSet searchForRecipient(int bill_id, int recipient_id) throws SQLException {
 		Connection connection = null;
 		ResultSet rs = null;
 		Statement statement = null;
-		String query = "SELECT * FROM friends WHERE user_id=" + user_id + ";";
+		String query = "SELECT * FROM bill_recipient WHERE bill_id=" + bill_id + " AND recipient_id=" 
+		+ recipient_id + ";";
 		try {
 			connection = JDBCSQLiteConnection.getConnection();
 			statement = connection.createStatement();
@@ -84,4 +58,37 @@ public class ApplicationManager {
 		}
 		return rs;		
 	}
+
+
+	public ResultSet searchTable(String table, String item, int id) throws SQLException {
+		Connection connection = null;
+		ResultSet rs = null;
+		Statement statement = null;
+		String query = "SELECT * FROM " + table + " WHERE "+ item +"= " + id + ";";
+		try {
+			connection = JDBCSQLiteConnection.getConnection();
+			statement = connection.createStatement();
+			rs = statement.executeQuery(query);
+		} catch (SQLException e){
+			e.printStackTrace();
+		}
+		return rs;		
+	}
+	
+	public ResultSet searchTable(String table, String item, String str) throws SQLException {
+		Connection connection = null;
+		ResultSet rs = null;
+		Statement statement = null;
+		String query = "SELECT * FROM " + table + " WHERE "+ item +"= '" + str + "';";
+		try {
+			connection = JDBCSQLiteConnection.getConnection();
+			statement = connection.createStatement();
+			rs = statement.executeQuery(query);
+		} catch (SQLException e){
+			e.printStackTrace();
+		}
+		return rs;		
+	}
+	
+	
 }

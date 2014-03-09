@@ -8,20 +8,24 @@
 	<!--  Assumes you have styles.css in WebContent/css/ -->
 </h:head>
 <h:body>
-	<h1 class="title">Add a new friend</h1>
+	<h1 class="title">Add a New Friend</h1>
 	<br />
 	<!-- Other HTML tags and non-input JSF elements here -->
 	<div align="center">
 
 		<h:form>
-			<legend>Search for a user to add as a friend</legend>
+		<fieldset>
+			<legend align="center">Search for a user to add as a friend</legend>
 			<br />
-				User Name: <h:inputText value="#{userManager.friendUserName}" />
-
+			<b>Username: </b>
+			<h:inputText value="#{userManager.friendUserName}" />
+			<b>  </b>
 			<h:commandButton value="Submit" action="#{userManager.addFriend}" />
-			<h:commandButton value="Back" action="front-page" />
+			<b>   </b>
+			<h:commandButton value="Back" action="#{userManager.addFriendGoBack}" />
 			<br />
 			<h:outputLabel value="#{userManager.statusMessage}" />
+		</fieldset>
 		</h:form>
 	</div>
 </h:body>

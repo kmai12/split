@@ -121,8 +121,9 @@ public class UserManager extends ApplicationManager implements Serializable {
 	 *         page or the registration page.
 	 */
 	public String registerUser() {
+		ResultSet rs = null;
 		try {
-			ResultSet rs = searchForUser(currentUser.getUser().toLowerCase());
+			rs = searchTable("user","user_name",currentUser.getUser().toLowerCase());
 			if (rs.next()) {
 				if ((currentUser.getUser().toLowerCase()).equals(rs.getString(
 						"user_name").toLowerCase())) {
@@ -156,9 +157,18 @@ public class UserManager extends ApplicationManager implements Serializable {
 			} // end check for empty fields and/or leading/trailing white spaces
 
 			insertIntoTable("user",currentUser);
+			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} 
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 		statusMessage=null;
 		return "start-page";
 	}
@@ -173,7 +183,7 @@ public class UserManager extends ApplicationManager implements Serializable {
 	public String login() {
 		ResultSet rs = null;
 		try {
-			rs = searchForUser(currentUser.getUser());
+			rs = searchTable("user","user_name",currentUser.getUser());
 			if (rs.next()) {
 				currentUser.setUser(rs.getString("user_name"));
 				currentUser.setID(rs.getInt("user_id"));
@@ -204,6 +214,8 @@ public class UserManager extends ApplicationManager implements Serializable {
 		// Sets BillManager's currentUser to the current user
 		User temp = new User(currentUser);
 		bm.setCurrentUser(temp);
+		bm.generateBillsList();
+		bm.generateOwedToYouList();
 		statusMessage = null;
 		return "front-page";
 	}
@@ -233,7 +245,7 @@ public class UserManager extends ApplicationManager implements Serializable {
 		
 		//check to see if user exist
 		try {
-			rs = searchForUser(friendUserName);
+			rs = searchTable("user","user_name",friendUserName);
 			if(rs.next()) {
 				User friend = new User();
 				friend.setUser(rs.getString("user_name"));
@@ -270,6 +282,7 @@ public class UserManager extends ApplicationManager implements Serializable {
 		//check to see if already friends with this user
 		//if pass all checks add friends
 		statusMessage = null;
+		friendUserName = "";
 		return "front-page";
 	
 	}
@@ -289,7 +302,7 @@ public class UserManager extends ApplicationManager implements Serializable {
 
 		ResultSet rs = null;
 		try {
-			rs = searchForFriends(currentUser.getID());
+			rs = searchTable("friends","user_id",currentUser.getID());
 			while (rs.next()) {
 				String s = rs.getString("friend_uname");
 				currentUserFriends.add(new SelectItem(s));
@@ -303,7 +316,7 @@ public class UserManager extends ApplicationManager implements Serializable {
 				e.printStackTrace();
 			}
 		}
-
+		currentUserFriends.add(new SelectItem(currentUser.getUser()));
 		return currentUserFriends;
 	}
 	public String addBillGoBack() {
@@ -316,6 +329,25 @@ public class UserManager extends ApplicationManager implements Serializable {
 		return "front-page";
 	}
 
+	public String addFriendGoBack() {
+		this.statusMessage = "";
+		this.friendUserName = "";
+		return "front-page";
+	}
+	
+	public String registerGoBack() {
+		this.statusMessage = "";
+		currentUser = new User();
+		return "start-page";
+	}
+	
+	
+	public String payGoBack() {
+		this.bm.setStatusMessage("");
+		this.bm.setRemoveID("");
+		return "front-page";
+	}
+	
 	// HELPER FUNCTIONS
 	/**
 	 * This method is a helper method that inserts information to data tables in the database

@@ -9,19 +9,18 @@
 	<!--  Assumes you have styles.css in WebContent/css/ -->
 </h:head>
 <h:body>
-	<h1 class="title">Add a bill</h1>
+	<h1 class="title">Add a Bill</h1>
 	<br />
 	<!-- Other HTML tags and non-input JSF elements here -->
 	<div align="center">
-		<fieldset>
-			<h:form>
-				<legend>Please enter the bill information below.</legend>
-				<br />
-Bill Name:
-<h:inputText value="#{userManager.bm.currentBill.bill_name}" />
-				<br />
-Total Cost:
-<h:inputText value="#{userManager.bm.currentBill.total}" />
+		<h:form>
+			<fieldset>
+				<legend align="center">Please enter the bill information
+					below.</legend>
+				<br /> <b>Bill Name: </b>
+				<h:inputText value="#{userManager.bm.currentBill.bill_name}" />
+				<br /> <b>Total Cost: </b>
+				<h:inputText value="#{userManager.bm.currentBill.total}" />
 				<br />
 				<h:selectOneMenu value="#{userManager.bm.recipientName}">
 					<f:selectItems value="#{userManager.currentUserFriends}" />
@@ -37,15 +36,14 @@ Total Cost:
 						</h:column>
 				</h:dataTable>
 				<br />
-				<h:commandButton value="Submit" action="#{userManager.bm.createBill}" />
-				<h:commandButton value="Go Back" action="#{userManager.addBillGoBack}" />
-				
+				<h:commandButton value="Submit"
+					action="#{userManager.bm.createBill}" />
+				<b> </b>
+				<h:commandButton value="Back" action="#{userManager.addBillGoBack}" />
+
 				<h:outputLabel value="#{userManager.bm.statusMessage}" />
-			</h:form>
-
-
-
-		</fieldset>
+			</fieldset>
+		</h:form>
 	</div>
 	<!-- This means bean named "yourBean" must have method named "getYourProperty" -->
 	<!--  #{yourBean.yourProperty} -->
