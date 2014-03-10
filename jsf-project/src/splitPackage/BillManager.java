@@ -309,7 +309,8 @@ public class BillManager extends ApplicationManager implements Serializable {
 			connection = JDBCSQLiteConnection.getConnection();
 			statement = connection.createStatement();
 			// check for duplicate bill
-
+			if (removeID.trim().equals(""))
+				return "billsyouowe";
 			String query = "DELETE FROM bill_recipient WHERE bill_id="
 					+ removeID + " AND recipient_id=" + currentUser.getID();
 			System.out.println(removeID + ":" + currentUser.getID());
