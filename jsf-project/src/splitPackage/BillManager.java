@@ -134,15 +134,15 @@ public class BillManager extends ApplicationManager implements Serializable {
 	 */
 	public String createBill() {
 		Connection connection = null;
-		Statement statement = null;
 		ResultSet rs = null;
+		Statement statement = null;
 		try {
 			connection = JDBCSQLiteConnection.getConnection();
 			statement = connection.createStatement();
 			// check for duplicate bill
-			String query = "";
-			rs = searchTable("bill", "bill_name", currentBill.getBill_name()
-					.toLowerCase());
+			String query = "SELECT * FROM bill WHERE bill_name='"
+					+ currentBill.getBill_name().toLowerCase() + "'";
+			rs = statement.executeQuery(query);
 			if (rs.next()) {
 				if ((currentBill.getBill_name().toLowerCase()).equals(rs
 						.getString("bill_name").toLowerCase())) {
@@ -151,7 +151,6 @@ public class BillManager extends ApplicationManager implements Serializable {
 					return "addbill";
 				}
 			}
-			rs.close();
 			// Checks for correct input format
 			if (checkValidInput(currentBill.getBill_name())) {
 				statusMessage = "Invalid Bill Name";
@@ -172,13 +171,14 @@ public class BillManager extends ApplicationManager implements Serializable {
 			query = "INSERT INTO bill VALUES(null,'"
 					+ currentBill.getBill_name() + "'," + currentUser.getID()
 					+ "," + "null," + currentBill.getCost() + ","
-					+ currentBill.getTotal() + ",'Not Paid'," + "null,"
-					+ "null," + recipientList.size() + ")";
+					+ currentBill.getTotal() + ",'Owed'," + "null," + "null,"
+					+ recipientList.size() + ")";
 			statement.executeUpdate(query);
 
-			rs = searchTable("bill", "bill_name", currentBill.getBill_name());
+			query = "SELECT * FROM BILL WHERE bill_name='"
+					+ currentBill.getBill_name() + "'";
+			rs = statement.executeQuery(query);
 			currentBill.setBill_ID(rs.getInt("bill_id"));
-			rs.close();
 
 			// Inserts a bill_recipient for each recipient
 			for (User recipient : recipientList) {
@@ -202,8 +202,6 @@ public class BillManager extends ApplicationManager implements Serializable {
 		}
 		statusMessage = "Success!";
 		currentBill = new Bill();
-		generateOwedToYouList();
-		recipientList = new ArrayList<User>();
 		return "addbill";
 	}
 
@@ -311,8 +309,10 @@ public class BillManager extends ApplicationManager implements Serializable {
 			connection = JDBCSQLiteConnection.getConnection();
 			statement = connection.createStatement();
 			// check for duplicate bill
+
 			String query = "DELETE FROM bill_recipient WHERE bill_id="
 					+ removeID + " AND recipient_id=" + currentUser.getID();
+			System.out.println(removeID + ":" + currentUser.getID());
 			statement.executeUpdate(query);
 			checkBills();
 		} catch (SQLException e) {
@@ -329,7 +329,7 @@ public class BillManager extends ApplicationManager implements Serializable {
 			}
 		}
 		// statusMessage = "Successfully Paid!";
-		return "front-page";
+		return "billsyouowe";
 	}
 
 	public String addRecipient() {
