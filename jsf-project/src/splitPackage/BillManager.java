@@ -23,12 +23,12 @@ public class BillManager extends ApplicationManager implements Serializable {
 	private List<Bill> billsList;
 	private List<Bill> owedToYouList;
 	private String totalPay;
-	private String totalReceive; 
+	private String totalReceive;
 	private String statusMessage;
 	private String removeID;
 	private String recipientName;
 	private List<User> recipientList;
-	
+
 	// Constructors
 	public BillManager() {
 		currentBill = new Bill();
@@ -42,27 +42,90 @@ public class BillManager extends ApplicationManager implements Serializable {
 	}
 
 	// Getters and Setters
-	public User getCurrentUser() { return currentUser; }
-	public void setCurrentUser(User currentUser) { this.currentUser = currentUser; }
-	public Bill getCurrentBill() { return currentBill; }
-	public void setCurrentBill(Bill currentBill) { this.currentBill = currentBill;}
-	public String getStatusMessage() { return statusMessage; }
-	public void setStatusMessage(String statusMessage) { this.statusMessage = statusMessage; } 
-	public String getRecipientName() { return recipientName; }
-	public void setRecipientName(String name) { recipientName = name; }
-	public void setRecipientList(String recipientName) { this.recipientName = recipientName; }
-	public String getRemoveID() { return removeID; }
-	public void setRemoveID(String removeID) { this.removeID = removeID; }
-	public List<Bill> getBillsList() { return this.generateBillsList(); }
-	public List<Bill> getOwedToYouList() { return this.generateOwedToYouList(); }
-	public void setbList(List<Bill> bList) { this.billsList = bList; }
-	public void setbOwedList(List<Bill> bOwedList) { this.owedToYouList = bOwedList; }
-	public List<User> getRecipientList() { return this.recipientList; }
-	public void setRecipientList(List<User> reps) { this.recipientList = reps; }	
-	public String getTotalPay() { return this.totalPay; }
-	public void setTotalPay(String amount) { this.totalPay = amount; }
-	public String getTotalReceive() { return this.totalReceive; }
-	public void setTotalReceive(String amount) { this.totalReceive = amount; }
+	public User getCurrentUser() {
+		return currentUser;
+	}
+
+	public void setCurrentUser(User currentUser) {
+		this.currentUser = currentUser;
+	}
+
+	public Bill getCurrentBill() {
+		return currentBill;
+	}
+
+	public void setCurrentBill(Bill currentBill) {
+		this.currentBill = currentBill;
+	}
+
+	public String getStatusMessage() {
+		return statusMessage;
+	}
+
+	public void setStatusMessage(String statusMessage) {
+		this.statusMessage = statusMessage;
+	}
+
+	public String getRecipientName() {
+		return recipientName;
+	}
+
+	public void setRecipientName(String name) {
+		recipientName = name;
+	}
+
+	public void setRecipientList(String recipientName) {
+		this.recipientName = recipientName;
+	}
+
+	public String getRemoveID() {
+		return removeID;
+	}
+
+	public void setRemoveID(String removeID) {
+		this.removeID = removeID;
+	}
+
+	public List<Bill> getBillsList() {
+		return this.generateBillsList();
+	}
+
+	public List<Bill> getOwedToYouList() {
+		return this.generateOwedToYouList();
+	}
+
+	public void setbList(List<Bill> bList) {
+		this.billsList = bList;
+	}
+
+	public void setbOwedList(List<Bill> bOwedList) {
+		this.owedToYouList = bOwedList;
+	}
+
+	public List<User> getRecipientList() {
+		return this.recipientList;
+	}
+
+	public void setRecipientList(List<User> reps) {
+		this.recipientList = reps;
+	}
+
+	public String getTotalPay() {
+		return this.totalPay;
+	}
+
+	public void setTotalPay(String amount) {
+		this.totalPay = amount;
+	}
+
+	public String getTotalReceive() {
+		return this.totalReceive;
+	}
+
+	public void setTotalReceive(String amount) {
+		this.totalReceive = amount;
+	}
+
 	// Methods
 	/**
 	 * Creates a bill.
@@ -71,14 +134,15 @@ public class BillManager extends ApplicationManager implements Serializable {
 	 */
 	public String createBill() {
 		Connection connection = null;
-		Statement statement = null;		
+		Statement statement = null;
 		ResultSet rs = null;
 		try {
 			connection = JDBCSQLiteConnection.getConnection();
 			statement = connection.createStatement();
 			// check for duplicate bill
 			String query = "";
-			rs = searchTable("bill","bill_name",currentBill.getBill_name().toLowerCase());
+			rs = searchTable("bill", "bill_name", currentBill.getBill_name()
+					.toLowerCase());
 			if (rs.next()) {
 				if ((currentBill.getBill_name().toLowerCase()).equals(rs
 						.getString("bill_name").toLowerCase())) {
@@ -94,28 +158,28 @@ public class BillManager extends ApplicationManager implements Serializable {
 				return "addbill";
 			}
 			// Checks for non-empty recipient list
-			if(recipientList.size() == 0){
+			if (recipientList.size() == 0) {
 				statusMessage = "Error: no recipients listed!";
 				return "addbill";
 			}
-			
+
 			// Splits the bill
 			currentBill.setCost(split(recipientList.size(),
-			currentBill.getTotal()));
+					currentBill.getTotal()));
 			// Inserts a bill into table bill with values
 			// bill_id, bill_name, sender_id, recipient_id, cost, total, status,
 			// date, comment
 			query = "INSERT INTO bill VALUES(null,'"
 					+ currentBill.getBill_name() + "'," + currentUser.getID()
 					+ "," + "null," + currentBill.getCost() + ","
-					+ currentBill.getTotal() + ",'Not Paid'," + "null," + "null,"
-					+ recipientList.size() + ")";
+					+ currentBill.getTotal() + ",'Not Paid'," + "null,"
+					+ "null," + recipientList.size() + ")";
 			statement.executeUpdate(query);
-		
-			rs=searchTable("bill","bill_name",currentBill.getBill_name());
+
+			rs = searchTable("bill", "bill_name", currentBill.getBill_name());
 			currentBill.setBill_ID(rs.getInt("bill_id"));
 			rs.close();
-			
+
 			// Inserts a bill_recipient for each recipient
 			for (User recipient : recipientList) {
 				int recipientID = recipient.getID();
@@ -123,7 +187,6 @@ public class BillManager extends ApplicationManager implements Serializable {
 						+ currentBill.getBill_ID() + "," + recipientID + ")";
 				statement.executeUpdate(query);
 			}
-			
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -145,8 +208,8 @@ public class BillManager extends ApplicationManager implements Serializable {
 	}
 
 	/**
-	 * This method connects to the database and obtains all the bills that 
-	 * the user needs to pay off.
+	 * This method connects to the database and obtains all the bills that the
+	 * user needs to pay off.
 	 * 
 	 * @return List of bills.
 	 */
@@ -156,9 +219,10 @@ public class BillManager extends ApplicationManager implements Serializable {
 		ResultSet rs2 = null;
 		double totalPay = 0;
 		try {
-			rs=searchTable("bill_recipient","recipient_id",currentUser.getID());
+			rs = searchTable("bill_recipient", "recipient_id",
+					currentUser.getID());
 			while (rs.next()) {
-				rs2=searchTable("bill","bill_id",rs.getInt("bill_id"));
+				rs2 = searchTable("bill", "bill_id", rs.getInt("bill_id"));
 				while (rs2.next()) {
 					Bill bill = new Bill();
 					bill.setBill_ID(rs2.getInt("bill_id"));
@@ -173,11 +237,11 @@ public class BillManager extends ApplicationManager implements Serializable {
 					rs2.close();
 				}
 			}
-			this.totalPay = "$" +String.format("%.2f",totalPay);
+			this.totalPay = "$" + String.format("%.2f", totalPay);
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 		} finally {
-			if (rs != null && rs2!=null) {
+			if (rs != null && rs2 != null) {
 				try {
 					rs.close();
 					rs2.close();
@@ -190,8 +254,9 @@ public class BillManager extends ApplicationManager implements Serializable {
 	}
 
 	/**
-	 * This method connects to the database and obtains all the bills that 
-	 * the user is awaiting payment from.
+	 * This method connects to the database and obtains all the bills that the
+	 * user is awaiting payment from.
+	 * 
 	 * @return List<Bill>
 	 */
 	public List<Bill> generateOwedToYouList() {
@@ -218,11 +283,11 @@ public class BillManager extends ApplicationManager implements Serializable {
 				}
 
 			}
-			this.totalReceive = "$" + String.format("%.2f",totalReceive);
+			this.totalReceive = "$" + String.format("%.2f", totalReceive);
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 		} finally {
-			if (rs != null && rs2!=null) {
+			if (rs != null && rs2 != null) {
 				try {
 					rs.close();
 					rs2.close();
@@ -234,7 +299,6 @@ public class BillManager extends ApplicationManager implements Serializable {
 		return owedToYouList;
 	}
 
-	
 	/**
 	 * Removes selected bill in the database from the user.
 	 * 
@@ -243,26 +307,14 @@ public class BillManager extends ApplicationManager implements Serializable {
 	public String payBill() {
 		Connection connection = null;
 		Statement statement = null;
-		ResultSet rs = null;
 		try {
 			connection = JDBCSQLiteConnection.getConnection();
 			statement = connection.createStatement();
-			try {
-				rs = searchForRecipient(Integer.parseInt(removeID),currentUser.getID());
 			// check for duplicate bill
-			if(rs.next()) {
-				String query = "DELETE FROM bill_recipient WHERE bill_id="
-						+ removeID + " AND recipient_id=" + currentUser.getID();
-				statement.executeUpdate(query);
-				checkBills();
-			} else {
-				statusMessage = "Invalid Bill_ID. Please enter another Bill_ID.";
-				return "billsyouowe";
-			}
-			} catch(NumberFormatException e) {
-				statusMessage = "Invalid Bill_ID. Please enter another Bill_ID.";
-				return "billsyouowe";
-			}
+			String query = "DELETE FROM bill_recipient WHERE bill_id="
+					+ removeID + " AND recipient_id=" + currentUser.getID();
+			statement.executeUpdate(query);
+			checkBills();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -276,16 +328,15 @@ public class BillManager extends ApplicationManager implements Serializable {
 
 			}
 		}
-		statusMessage = "";
-		setRemoveID("");
+		// statusMessage = "Successfully Paid!";
 		return "front-page";
 	}
-	
+
 	public String addRecipient() {
 		ResultSet rs = null;
-		//String query;
+		// String query;
 		try {
-			rs = searchTable("user","user_name",recipientName);
+			rs = searchTable("user", "user_name", recipientName);
 			if (rs.next()) {
 				User temp = new User();
 				temp.setUser(rs.getString("user_name"));
@@ -294,17 +345,19 @@ public class BillManager extends ApplicationManager implements Serializable {
 				temp.setFirst(rs.getString("first"));
 				temp.setLast(rs.getString("last"));
 				temp.setEmail(rs.getString("email"));
-				//check to see if user is already a recipient
-				if(! duplicates(temp)) {
+				// check to see if user is already a recipient
+				if (!duplicates(temp)) {
 					recipientList.add(temp);
 				} else {
-					statusMessage = "User " + temp.getUser() + " is already a recipient.";
+					statusMessage = "User " + temp.getUser()
+							+ " is already a recipient.";
 					return "addbill";
-				} ;
+				}
+				;
 			}
 		} catch (SQLException e) {
-			e.printStackTrace(); 
-		}finally {
+			e.printStackTrace();
+		} finally {
 			if (rs != null) {
 				try {
 					rs.close();
@@ -316,20 +369,20 @@ public class BillManager extends ApplicationManager implements Serializable {
 		return "addbill";
 	}
 
-	public Boolean checkBills(){
+	public Boolean checkBills() {
 		Boolean billAllPaid = false;
 		Connection connection = null;
 		ResultSet rs = null;
 		try {
 			// check for duplicate bill
 			connection = JDBCSQLiteConnection.getConnection();
-			rs=searchTable("bill_recipient","bill_id",Integer.parseInt(removeID));
-			if(!rs.next()){
+			rs = searchTable("bill_recipient", "bill_id",
+					Integer.parseInt(removeID));
+			if (!rs.next()) {
 				Statement statement = connection.createStatement();
-				String query = "DELETE FROM bill WHERE bill_id="
-						+ removeID;
+				String query = "DELETE FROM bill WHERE bill_id=" + removeID;
 				statement.executeUpdate(query);
-				billAllPaid = true;	
+				billAllPaid = true;
 				statement.close();
 			}
 			rs.close();
@@ -347,13 +400,12 @@ public class BillManager extends ApplicationManager implements Serializable {
 		}
 		return billAllPaid;
 	}
-	
-	
+
 	// Helper Function
 	private boolean duplicates(User user) {
 		for (int j = 0; j < recipientList.size(); j++) {
-				if (recipientList.get(j).getUser().equals(user.getUser()) )
-					return true;
+			if (recipientList.get(j).getUser().equals(user.getUser()))
+				return true;
 		}
 		return false;
 	}
