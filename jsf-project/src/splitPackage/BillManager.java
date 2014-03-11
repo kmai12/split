@@ -181,6 +181,7 @@ public class BillManager extends ApplicationManager implements Serializable {
 			currentBill.setBill_ID(rs.getInt("bill_id"));
 
 			// Inserts a bill_recipient for each recipient
+			System.out.println(recipientList.size());
 			for (User recipient : recipientList) {
 				int recipientID = recipient.getID();
 				query = "INSERT INTO bill_recipient VALUES("
@@ -277,7 +278,6 @@ public class BillManager extends ApplicationManager implements Serializable {
 					bill.setTotal(rs.getDouble("total"));
 					totalReceive += bill.getCost();
 					owedToYouList.add(bill);
-					rs2.close();
 				}
 
 			}
