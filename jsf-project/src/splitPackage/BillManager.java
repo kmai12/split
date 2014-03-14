@@ -372,6 +372,10 @@ public class BillManager extends ApplicationManager implements Serializable {
 			checkBills();
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}
+			catch (NumberFormatException ex){
+				statusMessage = "Please enter in a correct bill_id";
+				return "billsyouowe";
 		} finally {
 			if (connection != null) {
 				try {
