@@ -33,9 +33,11 @@
 			</h:column>
 			</h:dataTable>
 			<br />
-			<b> Enter the bill id of the bill that you would like to remove.</b>
+			<b> Enter the bill id of the bill that you would like to permanently delete.</b>
 			<br />
-			<h:commandButton value="Remove" action="#{userManager.bm.deleteBill}" />
+			<b> Warning: This will delete the bill from the recipients that may still owe you.</b>
+			<br />
+			<h:commandButton value="Delete" action="#{userManager.bm.deleteBill}" />
 			<b>  </b>
 			<h:inputText value="#{userManager.bm.removeID}" />
 			<br />
