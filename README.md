@@ -1,18 +1,16 @@
+Split It
+---
+
 CS48 W14
 G03
 Authors: 
-	Kevin Jih
-	
-	Lesley Khuu
-	
-	Kevin Mai
-	
-	Sohan Shah
-	
-	Jenny Vien
 
-Application:
-	Split It
+Kevin Jih, 
+Lesley Khuu, 
+Kevin Mai, 
+Sohan Shah, 
+Jenny Vien
+
 
 Table of Contents
 --------------------
