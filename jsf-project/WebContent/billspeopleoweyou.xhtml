@@ -33,6 +33,14 @@
 			</h:column>
 			</h:dataTable>
 			<br />
+			<b> Enter the bill id of the bill that you would like to remove.</b>
+			<br />
+			<h:commandButton value="Remove" action="#{userManager.bm.deleteBill}" />
+			<b>  </b>
+			<h:inputText value="#{userManager.bm.removeID}" />
+			<br />
+			<h:outputLabel value="#{userManager.bm.statusMessage}"/>
+			<br />
 			<h:commandButton value="Back" action="front-page" />
 				
 		</h:form>

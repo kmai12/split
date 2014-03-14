@@ -13,8 +13,9 @@ import java.sql.Statement;
 import java.io.Serializable;
 
 /**
- * Bill class that contains all the information of the bill
- *
+ * Bill represent a bill that the user would like to split amongst his or her friends.
+ * e.g. a restaurant bill or utility bill. Every bill has a bill id, senderid, recipient id, 
+ * bill name, total amount, divided cost, and a status.
  */
 @ManagedBean
 public class Bill implements Serializable {
@@ -30,10 +31,7 @@ public class Bill implements Serializable {
 		this.bill_name = bill_name;
 		this.total = total;
 		this.cost = cost;
-		this.date = date;
 		this.status = status;
-		this.comment = comment;
-		//this.numRecipients = numRecipients;
 	}
 
 	// Attributes
@@ -120,66 +118,4 @@ public class Bill implements Serializable {
 		this.comment = comment;
 	}
 	
-	public String getRecipientName() {
-		String userName = "N/A";
-		Connection connection = null;
-		Statement statement = null;
-		ResultSet rs = null;
-		try {
-			connection = JDBCSQLiteConnection.getConnection();
-			statement = connection.createStatement();
-			String query = "SELECT * FROM user WHERE user_id=" + recipient_id;
-			rs = statement.executeQuery(query);
-			while (rs.next()) {
-				userName = rs.getString("user_name");
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			if (connection != null) {
-				try {
-					statement.close();
-					connection.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-
-			}
-		}
-		return userName;
-	}
-
-	public String getSenderName() {
-		String userName = "N/A";
-		Connection connection = null;
-		Statement statement = null;
-		ResultSet rs = null;
-		try {
-			connection = JDBCSQLiteConnection.getConnection();
-			statement = connection.createStatement();
-			String query = "SELECT * FROM user WHERE user_id=" + sender_id;
-			rs = statement.executeQuery(query);
-			while (rs.next()) {
-				userName = rs.getString("user_name");
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			if (connection != null) {
-				try {
-					statement.close();
-					connection.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-
-			}
-		}
-		return userName;
-	}
-
-	
-	public String toString() {
-		return this.bill_name + " " + this.cost;
-	}
 }

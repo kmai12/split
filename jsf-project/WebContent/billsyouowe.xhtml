@@ -10,8 +10,8 @@
 	<!--  Assumes you have styles.css in WebContent/css/ -->
 </h:head>
 <body>
-<h1 class="title">Bills You Owe</h1>
-<div align="center">
+	<h1 class="title">Bills You Owe</h1>
+	<div align="center">
 		<h:form>
 		<br />
 			<h:dataTable border="1" value="#{userManager.bm.billsList}"
@@ -33,8 +33,8 @@
 			</h:column>
 			</h:dataTable>
 			<br />
-			<b> Enter Bill_ID of the bill that you want to pay
-				off </b>
+			<b> Enter the bill id of the bill that you would like to pay
+				off. </b>
 			<br />
 			<h:commandButton value="Pay" action="#{userManager.bm.payBill}" />
 			<b>  </b>

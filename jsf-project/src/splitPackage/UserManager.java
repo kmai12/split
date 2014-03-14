@@ -175,7 +175,7 @@ public class UserManager extends ApplicationManager implements Serializable {
 	
 
 	/**
-	 * This method is used to login the a user.
+	 * This method is used to help the user login.
 	 * 
 	 * @return a string that directs you to the proper page. Either the start
 	 *         page or the login page.
@@ -219,7 +219,11 @@ public class UserManager extends ApplicationManager implements Serializable {
 		statusMessage = null;
 		return "front-page";
 	}
-	
+	/**
+	 * This method "logs the user out" and resets the currentUser
+	 * to a new user.
+	 * @return a string that redirts the user to the start-page.
+	 */
 	public String logout() {
 		currentUser = new User();
 		bm = new BillManager();
@@ -286,7 +290,11 @@ public class UserManager extends ApplicationManager implements Serializable {
 		return "front-page";
 	
 	}
-	public String addBill() {
+	/**
+	 * This  method populates the the dropdown menu in the addbill page.
+	 * @return a string that directs the user to the addbill page.
+	 */
+		public String addBill() {
 		findCurrentUserFriends();
 		return "addbill";
 	}
@@ -297,7 +305,11 @@ public class UserManager extends ApplicationManager implements Serializable {
 	public List<SelectItem> getCurrentUserFriends() {
 		return currentUserFriends;
 	}
-	
+	/**
+	 * This method searches the database for a list of all the the current user's
+	 * friends.
+	 * @return a list of all the current user's friends.
+	 */
 	public List<SelectItem> findCurrentUserFriends() {
 
 		ResultSet rs = null;
@@ -319,6 +331,10 @@ public class UserManager extends ApplicationManager implements Serializable {
 		currentUserFriends.add(new SelectItem(currentUser.getUser()));
 		return currentUserFriends;
 	}
+	/**
+	 * This method is used to clear the fields in the addbill page.
+	 * @return a string that redirects the user to the front-page.
+	 */
 	public String addBillGoBack() {
 		this.currentUserFriends = new ArrayList<SelectItem>();
 		bm.setRecipientList(new ArrayList<User>());
@@ -326,22 +342,32 @@ public class UserManager extends ApplicationManager implements Serializable {
 		bm.getCurrentBill().setTotal(0);
 		bm.setStatusMessage("");
 		
+		bm.refresh();
 		return "front-page";
 	}
-
+	/**
+	 * This method is used to clear the fields in the addbill page.
+	 * @return a string that redirects the user to the front-page.
+	 */
 	public String addFriendGoBack() {
 		this.statusMessage = "";
 		this.friendUserName = "";
 		return "front-page";
 	}
-	
+	/**
+	 * This method is used to clear the fields in the register page.
+	 * @return a string that redirects the user to the start-page.
+	 */
 	public String registerGoBack() {
 		this.statusMessage = "";
 		currentUser = new User();
 		return "start-page";
 	}
 	
-	
+	/**
+	 * This method is used to clear the fields in the billsyouowe page.
+	 * @return a string that redirects the user to the front-page.
+	 */
 	public String payGoBack() {
 		this.bm.setStatusMessage("");
 		this.bm.setRemoveID("");
