@@ -119,7 +119,7 @@ You are done!
 
 Click "Stop" on the Apache Tomcat 7.0 Tomcat7 window to stop the server.
 
-8. Cleaning Up
+8.Cleaning Up
 
 Use command "ant clean" to undeploy the app and delete .class files.
 
