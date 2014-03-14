@@ -81,9 +81,11 @@ Start up the Tomcat Server
 
 1.In the windows start menu, search for "Monitor Tomcat" and execute it. A window should pop up.
 
+
 2.Under the general tab, select START.
 
 Run the program
+
 
 3.Run a CommandPrompt as an Adminstrator:
  *Search for it in the startup menu.
@@ -91,26 +93,33 @@ Run the program
 
 NOTE:This step is important. YOU NEED TO RUN AS ADMINISTRATOR.
 
+
 4.cd into the Project directory.
 
 Ex. C:/Users/%USERNAME%/Desktop/Projects
+
 
 5.Enter in the following ant commands:
 	*ant warTarget
 	*ant deployTarget
 
+
 6.Go on your favorite web browser and type in:
 
 http://localhost:8080/splitApp
+
 NOTE:The default port for Tomcat is 8080, if you changed it in the installation, just replace 8080 by the port number you selected.
 
-
 You are done!
+
 
 7.Closing the app and server
 
 Click "Stop" on the Apache Tomcat 7.0 Tomcat7 window to stop the server.
-Use command "ant clean" to undeploy the app.
+
+8. Cleaning Up
+
+Use command "ant clean" to undeploy the app and delete .class files.
 
 
 IV.Split it
@@ -124,35 +133,40 @@ test1	      test1
 test2	      test2
 test3	      test3
 
-Add a Bill:
+Login:
+	
+    Logs you in.
+
+Add Bill:
 
     Bill Name: Enter name that the bill is for
 
     Total Cost: Enter the total cost of the bill that will be split evenly between the recipients.
 
-    Recipients: Enter the usernames of the recipients of the bill you want to charge to. 
-    These recipients will be charged the split cost.
+    Recipients: Select the usernames of the recipients of the bill you want to charge to. 
+    		These recipients will be charged the split cost.
+		Note: You will need to add someone as a friend before giving them a bill.
 
-View Bills:
+Add Friend:
 
-     In the front-page there is a table of pending bills that you owe on the bottom left.
+    Username: Enter username of friend you want to add as a friend. This is required in order to send your friend a bill.
+
+Bills You Owe:
+
+    List of bills you owe to other people.
 
 Pay:
 
      Type in the bill_id if the bill that you have paid off. Then click Pay. This will remove the bill from your bill list.
 
-
-
+Bills That People Owe You:
     
-V.UNFINISHED/BUGS
-------------------
-There are a couple of unusable buttons in the program. These are features that will either be removed or implemented in the final version.
-They include:
-     *Archive
-     *Payment History
-     *Forgot PW?
+    List of bills people owe you.
 
-Bugs:
-     *statusMessage does not reset, often displaying wrong status messages.
-     *input forms do not reset, displaying previous information that was input
-     into the forms.
+Delete:
+	
+    If you no longer want a bill to be shown to others and want it to be deleted permanently, type in the bill_id that you want to delete and it will be deleted from everybody's corresponding list.
+
+Log Out:
+
+    Logs you out.
