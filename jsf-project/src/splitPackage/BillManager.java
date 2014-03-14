@@ -1,7 +1,6 @@
 package splitPackage;
 
 import javax.faces.bean.*;
-import javax.faces.model.SelectItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +14,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 /**
- * BillManager manages all the bill events such as creating a new bill and deleting a bill.
+ * BillManager manages all the bill events such as creating a new bill and
+ * deleting a bill.
  */
 @ManagedBean
 public class BillManager extends ApplicationManager implements Serializable {
@@ -86,7 +86,7 @@ public class BillManager extends ApplicationManager implements Serializable {
 	public void setRemoveID(String removeID) {
 		this.removeID = removeID;
 	}
-	
+
 	public List<Bill> getBillsList() {
 		return this.generateBillsList();
 	}
@@ -305,6 +305,7 @@ public class BillManager extends ApplicationManager implements Serializable {
 	public String deleteBill() {
 		Connection connection = null;
 		Statement statement = null;
+		List<Bill> owedToYou = generateOwedToYouList();
 		try {
 			connection = JDBCSQLiteConnection.getConnection();
 			statement = connection.createStatement();
@@ -312,14 +313,27 @@ public class BillManager extends ApplicationManager implements Serializable {
 				statusMessage = "Please enter a bill id.";
 				return "billspeopleoweyou";
 			}
+			boolean billExists = false;
+			for (Bill i : owedToYou) {
+				if (i.getBill_ID() == Integer.parseInt(removeID)) {
+					billExists = true;
+					break;
+				}
+			}
+			if (!billExists) {
+				statusMessage = "Bill does not exist!";
+				return "billspeopleoweyou";
+			}
 			String query = "DELETE FROM bill_recipient WHERE bill_id="
 					+ removeID;
 			statement.executeUpdate(query);
-			query="DELETE FROM bill where bill_id="
-					+ removeID;
+			query = "DELETE FROM bill where bill_id=" + removeID;
 			statement.executeUpdate(query);
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} catch (NumberFormatException ex) {
+			statusMessage = "Enter a valid bill id";
+			return "billspeopleoweyou";
 		} finally {
 			if (connection != null) {
 				try {
@@ -338,8 +352,8 @@ public class BillManager extends ApplicationManager implements Serializable {
 	}
 
 	/**
-	 * This method removes the bill that the recipient believed they
-	 * have paid off.
+	 * This method removes the bill that the recipient believed they have paid
+	 * off.
 	 * 
 	 * @return a string that directs you to the billsyouowe page
 	 */
@@ -374,8 +388,10 @@ public class BillManager extends ApplicationManager implements Serializable {
 		this.setRemoveID("");
 		return "billsyouowe";
 	}
+
 	/**
 	 * This method is used to add a new recipient to the bill.
+	 * 
 	 * @return a string that directs you to the addbill page.
 	 */
 	public String addRecipient() {
@@ -398,7 +414,7 @@ public class BillManager extends ApplicationManager implements Serializable {
 					statusMessage = "User " + temp.getUser()
 							+ " is already a recipient.";
 					return "addbill";
-			}
+				}
 				;
 			}
 		} catch (SQLException e) {
@@ -415,11 +431,13 @@ public class BillManager extends ApplicationManager implements Serializable {
 		statusMessage = "";
 		return "addbill";
 	}
+
 	/**
-	 * This method checks to see if all recipients have paid the bill. 
-	 * If they did, the bill will be removed from the database.
-	 * @return a boolean that specifies whether or not all recipients have 
-	 * paid the bill. 
+	 * This method checks to see if all recipients have paid the bill. If they
+	 * did, the bill will be removed from the database.
+	 * 
+	 * @return a boolean that specifies whether or not all recipients have paid
+	 *         the bill.
 	 */
 	public boolean checkBills() {
 		boolean billAllPaid = false;
@@ -452,10 +470,10 @@ public class BillManager extends ApplicationManager implements Serializable {
 		}
 		return billAllPaid;
 	}
-	
+
 	/**
-	 * This method updates the total amount that the user owes others and the total 
-	 * amount that others owe the user. 
+	 * This method updates the total amount that the user owes others and the
+	 * total amount that others owe the user.
 	 */
 	public void refresh() {
 		generateOwedToYouList();
@@ -464,9 +482,11 @@ public class BillManager extends ApplicationManager implements Serializable {
 
 	// Helper Function
 	/**
-	 * This method is a helper function that checks if there are duplicates in the
-	 * recipients list.
-	 * @param user The user that is selected to be added to the bill.
+	 * This method is a helper function that checks if there are duplicates in
+	 * the recipients list.
+	 * 
+	 * @param user
+	 *            The user that is selected to be added to the bill.
 	 * @return a boolean that specifies if there is a duplicate.
 	 */
 	private boolean duplicates(User user) {
@@ -476,10 +496,14 @@ public class BillManager extends ApplicationManager implements Serializable {
 		}
 		return false;
 	}
+
 	/**
 	 * This method is a helper function that splits the total cost of the bill.
-	 * @param recipientAmount the number of recipients of this bill.
-	 * @param total the total cost of the bill.
+	 * 
+	 * @param recipientAmount
+	 *            the number of recipients of this bill.
+	 * @param total
+	 *            the total cost of the bill.
 	 * @return an amount that each recipient should pay.
 	 */
 	private double split(int recipientAmount, double total) {

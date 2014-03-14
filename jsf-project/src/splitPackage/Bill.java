@@ -13,9 +13,9 @@ import java.sql.Statement;
 import java.io.Serializable;
 
 /**
- * Bill represent a bill that the user would like to split amongst his or her friends.
- * e.g. a restaurant bill or utility bill. Every bill has a bill id, senderid, recipient id, 
- * bill name, total amount, divided cost, and a status.
+ * Bill represent a bill that the user would like to split amongst his or her
+ * friends. e.g. a restaurant bill or utility bill. Every bill has a bill id,
+ * senderid, recipient id, bill name, total amount, divided cost, and a status.
  */
 @ManagedBean
 public class Bill implements Serializable {
@@ -117,7 +117,7 @@ public class Bill implements Serializable {
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
-	
+
 	public String getRecipientName() {
 		String userName = "N/A";
 		Connection connection = null;
@@ -176,7 +176,6 @@ public class Bill implements Serializable {
 		return userName;
 	}
 
-	
 	public String toString() {
 		return this.bill_name + " " + this.cost;
 	}
