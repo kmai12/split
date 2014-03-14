@@ -118,4 +118,66 @@ public class Bill implements Serializable {
 		this.comment = comment;
 	}
 	
+	public String getRecipientName() {
+		String userName = "N/A";
+		Connection connection = null;
+		Statement statement = null;
+		ResultSet rs = null;
+		try {
+			connection = JDBCSQLiteConnection.getConnection();
+			statement = connection.createStatement();
+			String query = "SELECT * FROM user WHERE user_id=" + recipient_id;
+			rs = statement.executeQuery(query);
+			while (rs.next()) {
+				userName = rs.getString("user_name");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if (connection != null) {
+				try {
+					statement.close();
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+
+			}
+		}
+		return userName;
+	}
+
+	public String getSenderName() {
+		String userName = "N/A";
+		Connection connection = null;
+		Statement statement = null;
+		ResultSet rs = null;
+		try {
+			connection = JDBCSQLiteConnection.getConnection();
+			statement = connection.createStatement();
+			String query = "SELECT * FROM user WHERE user_id=" + sender_id;
+			rs = statement.executeQuery(query);
+			while (rs.next()) {
+				userName = rs.getString("user_name");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if (connection != null) {
+				try {
+					statement.close();
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+
+			}
+		}
+		return userName;
+	}
+
+	
+	public String toString() {
+		return this.bill_name + " " + this.cost;
+	}
 }

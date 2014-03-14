@@ -4,8 +4,9 @@ import javax.faces.bean.*;
 import java.io.Serializable;
 
 /**
- * User represents a user of our system. Every user has a username, password,
- * email, first name, last name, and an unique id number.
+ * User represents a user of our system. Every user has a username,
+ * password, first name, last name, email, and an unique id number.
+ * 
  */
 @ManagedBean
 public class User implements Serializable {
