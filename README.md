@@ -22,8 +22,6 @@ III.Creating and running Split
 
 IV.Split It
 
-V.Unfinished/Bugs
-
 
 
 
