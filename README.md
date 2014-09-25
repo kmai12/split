@@ -11,7 +11,12 @@ Kevin Mai,
 Sohan Shah, 
 Jenny Vien
 
-Split It uses the following technologies: JFS Framework, Java, SQLite, JDBC, Apache Tomcat 7, HTML, CSS
+Split It uses the following technologies:
+JFS Framework
+Java, SQLite
+JDBC, Apache Tomcat 7
+HTML
+CSS
 
 Table of Contents
 --------------------
