@@ -11,7 +11,7 @@ Kevin Mai,
 Sohan Shah, 
 Jenny Vien
 
-Split It uses the following technologies:
+Split It uses the following technologies:	
 JFS Framework	
 Java	
 SQLite	
